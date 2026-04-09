@@ -1,0 +1,80 @@
+name: Deploy Frontend
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'apps/**'
+      - 'packages/**'
+      - 'pnpm-lock.yaml'
+
+concurrency:
+  group: deploy-frontend
+  cancel-in-progress: true
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Type check
+        run: pnpm turbo type-check
+
+      - name: Lint
+        run: pnpm turbo lint
+
+  deploy:
+    needs: check
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: ${{ secrets.SSH_PORT }}
+          script: |
+            set -e
+            REPO_DIR="/root/qonaqta/qonaqta-frontend"
+            REPO_URL="git@github-frontend:${{ github.repository }}.git"
+
+            echo "=== Pulling latest changes ==="
+            if [ -d "$REPO_DIR" ]; then
+              cd "$REPO_DIR"
+              git fetch origin
+              git checkout main
+              git pull origin main
+            else
+              mkdir -p /root/qonaqta
+              git clone -b main "$REPO_URL" "$REPO_DIR"
+              cd "$REPO_DIR"
+            fi
+
+            echo "=== Installing dependencies ==="
+            pnpm install --frozen-lockfile
+
+            echo "=== Building all apps ==="
+            pnpm turbo build
+
+            echo "=== Health check ==="
+            curl -sf https://qonaqta.kz/ > /dev/null && echo "Web: OK" || echo "WARNING: Web health check failed"
+            curl -sf https://dashboard.qonaqta.kz/ > /dev/null && echo "Partner: OK" || echo "WARNING: Partner health check failed"
+            curl -sf https://hub.qonaqta.kz/ > /dev/null && echo "Dashboard: OK" || echo "WARNING: Dashboard health check failed"
+
+            echo "=== Frontend deployed successfully! ==="

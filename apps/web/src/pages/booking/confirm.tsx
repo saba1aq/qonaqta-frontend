@@ -190,14 +190,16 @@ export function ConfirmPage() {
         )}
       </div>
 
-      <div className="fixed bottom-0 left-0 right-0 max-w-[480px] mx-auto p-4 bg-white border-t">
-        <Button
-          className="w-full h-12 rounded-xl text-sm font-semibold"
-          disabled={!canSubmit || createBooking.isPending}
-          onClick={handleSubmit}
-        >
-          {createBooking.isPending ? 'Бронирование...' : 'Завершить бронирование'}
-        </Button>
+      <div className="fixed bottom-0 left-0 right-0 max-w-120 mx-auto z-30">
+        <div className="bg-white/80 backdrop-blur-xl border-t border-neutral-100 px-5 py-4">
+          <Button
+            className="w-full h-13 rounded-2xl text-[15px] font-semibold bg-neutral-900 text-white hover:bg-neutral-800 active:scale-[0.98] transition-all shadow-lg shadow-neutral-900/20"
+            disabled={!canSubmit || createBooking.isPending}
+            onClick={handleSubmit}
+          >
+            {createBooking.isPending ? 'Бронирование...' : 'Подтвердить'}
+          </Button>
+        </div>
       </div>
     </div>
   )

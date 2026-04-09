@@ -7,13 +7,11 @@ interface BookingFormState {
   guestName: string
   guestPhone: string
   notes: string
-  selectedTableId: number | null
   setGuestCount: (count: number) => void
   setDate: (date: string) => void
   setTimeSlot: (slot: string) => void
   setGuestInfo: (name: string, phone: string) => void
   setNotes: (notes: string) => void
-  selectTable: (id: number | null) => void
   reset: () => void
 }
 
@@ -32,7 +30,6 @@ const initialState = {
   guestName: '',
   guestPhone: '',
   notes: '',
-  selectedTableId: null as number | null,
 }
 
 export const useBookingFormStore = create<BookingFormState>((set) => ({
@@ -43,6 +40,5 @@ export const useBookingFormStore = create<BookingFormState>((set) => ({
   setTimeSlot: (slot: string) => set({ timeSlot: slot }),
   setGuestInfo: (name: string, phone: string) => set({ guestName: name, guestPhone: phone }),
   setNotes: (notes: string) => set({ notes }),
-  selectTable: (id: number | null) => set({ selectedTableId: id }),
   reset: () => set(initialState),
 }))

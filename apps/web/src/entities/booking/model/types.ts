@@ -11,7 +11,6 @@ export interface CreateBookingRequest {
 export interface Booking {
   id: string
   branch_id: number
-  table_id: number
   user_id: string | null
   date: string
   time_slot: string
@@ -19,7 +18,6 @@ export interface Booking {
   status: string
   guest_name: string
   guest_phone: string
-  deposit_amount: number | null
   notes: string | null
   created_at: string
   cancelled_at: string | null

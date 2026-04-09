@@ -5,11 +5,6 @@ export type {
   BranchDetail,
   BranchSchedule,
   BranchPhoto,
-  Floor,
-  Table,
-  FloorDecoration,
-  MenuCategory,
-  MenuItem,
 } from './model/types'
 
 export {
@@ -17,6 +12,4 @@ export {
   useCuisines,
   useBranches,
   useBranchDetail,
-  useFloors,
-  useMenu,
 } from './api'

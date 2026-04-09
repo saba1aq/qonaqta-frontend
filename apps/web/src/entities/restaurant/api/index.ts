@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 import { apiClient } from '@/shared/api'
-import type { City, BranchList, BranchDetail, Floor, Cuisine, MenuCategory } from '../model/types'
+import type { City, BranchList, BranchDetail, Cuisine } from '../model/types'
 
 export function useCities() {
   return useQuery<City[]>({
@@ -41,28 +41,6 @@ export function useBranchDetail(slug: string) {
     queryKey: ['branch', slug],
     queryFn: async () => {
       const { data } = await apiClient.get<BranchDetail>(`/restaurants/${slug}`)
-      return data
-    },
-    enabled: !!slug,
-  })
-}
-
-export function useFloors(slug: string) {
-  return useQuery<Floor[]>({
-    queryKey: ['floors', slug],
-    queryFn: async () => {
-      const { data } = await apiClient.get<Floor[]>(`/restaurants/${slug}/floors`)
-      return data
-    },
-    enabled: !!slug,
-  })
-}
-
-export function useMenu(slug: string) {
-  return useQuery<MenuCategory[]>({
-    queryKey: ['menu', slug],
-    queryFn: async () => {
-      const { data } = await apiClient.get<MenuCategory[]>(`/restaurants/${slug}/menu`)
       return data
     },
     enabled: !!slug,
