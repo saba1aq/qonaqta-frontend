@@ -1,8 +1,7 @@
-import { Clock, Phone, Users, CreditCard, MessageSquare } from "lucide-react"
+import { Clock, Phone, Users, MessageSquare } from "lucide-react"
 import { Button } from "@qonaqta/ui/components/button"
 import { Separator } from "@qonaqta/ui/components/separator"
 import type { Reservation } from "../model/types"
-import { TABLES } from "../model/constants"
 
 interface ReservationDetailCardProps {
   reservation: Reservation
@@ -23,9 +22,6 @@ export function ReservationDetailCard({
   onNoShow,
   onComplete,
 }: ReservationDetailCardProps) {
-  const table = TABLES.find((t) => t.id === reservation.tableId)
-  const zone = table?.zone === "main" ? "Основной зал" : table?.zone === "terrace" ? "Терраса" : "VIP"
-
   return (
     <>
       <div className="fixed inset-0 z-40" onClick={onClose} />
@@ -50,19 +46,10 @@ export function ReservationDetailCard({
             <Clock className="size-3.5 shrink-0" />
             {reservation.startTime} — {reservation.endTime}
           </div>
-          {table && (
+          {reservation.tableLabel && (
             <div className="flex items-center gap-2 text-xs text-[#1C1C1C]/60">
               <div className="size-3.5 shrink-0" />
-              {table.name} · {zone}
-            </div>
-          )}
-          {reservation.deposit != null && (
-            <div className="flex items-center gap-2 text-xs">
-              <CreditCard className="size-3.5 shrink-0 text-[#1C1C1C]/60" />
-              <span className={reservation.depositPaid ? "text-green-600" : "text-[#1C1C1C]/60"}>
-                {reservation.deposit.toLocaleString()} ₸ {reservation.depositPaid ? "оплачен" : "не оплачен"}
-              </span>
-              {reservation.depositPaid && <span className="text-green-600">✓</span>}
+              {reservation.tableLabel}
             </div>
           )}
           {reservation.note && (

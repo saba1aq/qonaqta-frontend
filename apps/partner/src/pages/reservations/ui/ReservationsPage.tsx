@@ -33,8 +33,7 @@ interface ApiBooking {
   start_time: string
   guests_count: number
   status: string
-  table_number: number
-  table_id: string
+  table_label: string | null
 }
 
 function mapApiBooking(b: ApiBooking): Reservation {
@@ -49,7 +48,7 @@ function mapApiBooking(b: ApiBooking): Reservation {
     partySize: b.guests_count,
     startTime,
     endTime,
-    tableId: b.table_id ? String(b.table_id) : "unknown",
+    tableLabel: b.table_label ?? undefined,
     status: (b.status as Reservation["status"]) ?? "pending",
   }
 }
@@ -121,7 +120,7 @@ export function ReservationsPage() {
     onSuccess: invalidate,
   })
 
-  const todayCount = reservations.filter((r) => r.status !== "blocked").length
+  const todayCount = reservations.length
 
   return (
     <div className="flex h-[calc(100svh-48px)] flex-col gap-5 -m-6 lg:-m-8 p-6 lg:p-8">

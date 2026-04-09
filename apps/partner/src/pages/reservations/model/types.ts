@@ -7,6 +7,8 @@ export interface Reservation {
   partySize: number;
   startTime: string;
   endTime: string;
+  tableLabel?: string;
   status: ReservationStatus;
   note?: string;
+  seatedMinutes?: number;
 }

@@ -4,12 +4,8 @@ import type { Reservation } from "../model/types"
 import {
   HOUR_WIDTH,
   ROW_HEIGHT,
-  TABLE_COL_WIDTH,
-  TABLES,
   TIMELINE_END,
   TIMELINE_START,
-  ZONES,
-  ZONE_COLORS,
   STATUS_STYLES,
 } from "../model/constants"
 import { ReservationBlock } from "./ReservationBlock"
@@ -29,6 +25,7 @@ function timeToHours(time: string): number {
   return h + m / 60
 }
 
+const TABLE_COL_WIDTH = 160
 const hours = Array.from({ length: TIMELINE_END - TIMELINE_START }, (_, i) => TIMELINE_START + i)
 
 export function TimelineView({ reservations, currentTime, onConfirm, onCancel, onNoShow, onComplete }: TimelineViewProps) {
@@ -40,22 +37,13 @@ export function TimelineView({ reservations, currentTime, onConfirm, onCancel, o
   const currentHours = timeToHours(currentTime)
   const currentX = (currentHours - TIMELINE_START) * HOUR_WIDTH
 
-  const tablesByZone = useMemo(() => {
-    return ZONES.map((zone) => ({
-      zone,
-      tables: TABLES.filter((t) => t.zone === zone.id),
-    }))
-  }, [])
-
-  const allRows: ({ type: "zone"; zone: (typeof ZONES)[0] } | { type: "table"; table: (typeof TABLES)[0]; rowIndex: number })[] = []
-  let rowIndex = 0
-  for (const { zone, tables } of tablesByZone) {
-    allRows.push({ type: "zone", zone })
-    for (const table of tables) {
-      allRows.push({ type: "table", table, rowIndex })
-      rowIndex++
+  const tableLabels = useMemo(() => {
+    const labels = new Set<string>()
+    for (const r of reservations) {
+      labels.add(r.tableLabel ?? "Без стола")
     }
-  }
+    return Array.from(labels).sort()
+  }, [reservations])
 
   const handleBlockClick = (reservation: Reservation, e: React.MouseEvent) => {
     if (selectedId === reservation.id) {
@@ -83,7 +71,7 @@ export function TimelineView({ reservations, currentTime, onConfirm, onCancel, o
   }, [reservations])
 
   const totalCovers = useMemo(
-    () => reservations.filter((r) => r.status !== "blocked").reduce((sum, r) => sum + r.partySize, 0),
+    () => reservations.reduce((sum, r) => sum + r.partySize, 0),
     [reservations]
   )
 
@@ -97,44 +85,18 @@ export function TimelineView({ reservations, currentTime, onConfirm, onCancel, o
             </span>
           </div>
           <div>
-            {allRows.map((row) => {
-              if (row.type === "zone") {
-                return (
-                  <div
-                    key={`zone-${row.zone.id}`}
-                    className="flex h-7 items-center border-b border-[#F3F3F3] bg-[#F3F3F3]/50 px-4"
-                  >
-                    <span className="text-[11px] font-medium uppercase tracking-[0.5px] text-[#1C1C1C]/30">
-                      {row.zone.name}
-                    </span>
-                  </div>
-                )
-              }
-              return (
-                <div
-                  key={row.table.id}
-                  className={cn(
-                    "flex items-center gap-2.5 border-b border-[#F3F3F3] px-4",
-                    row.rowIndex % 2 === 1 && "bg-[#F3F3F3]/50"
-                  )}
-                  style={{ height: ROW_HEIGHT }}
-                >
-                  <div
-                    className={cn(
-                      "flex size-5 shrink-0 items-center justify-center text-[#1C1C1C]/30",
-                      row.table.shape === "circle"
-                        ? "rounded-full border border-[#1C1C1C]/20"
-                        : "rounded-[3px] border border-[#1C1C1C]/20"
-                    )}
-                  >
-                    <span className="text-[8px]">{row.table.capacity}</span>
-                  </div>
-                  <span className="text-[13px] font-medium text-[#1C1C1C]">{row.table.name}</span>
-                  <span className="text-[11px] text-[#1C1C1C]/40">{row.table.capacity} мест</span>
-                  <div className={cn("ml-auto size-2 rounded-full", ZONE_COLORS[row.table.zone])} />
-                </div>
-              )
-            })}
+            {tableLabels.map((label, i) => (
+              <div
+                key={label}
+                className={cn(
+                  "flex items-center gap-2.5 border-b border-[#F3F3F3] px-4",
+                  i % 2 === 1 && "bg-[#F3F3F3]/50"
+                )}
+                style={{ height: ROW_HEIGHT }}
+              >
+                <span className="text-[13px] font-medium text-[#1C1C1C]">{label}</span>
+              </div>
+            ))}
           </div>
         </div>
 
@@ -155,44 +117,34 @@ export function TimelineView({ reservations, currentTime, onConfirm, onCancel, o
             </div>
 
             <div className="relative">
-              {allRows.map((row) => {
-                if (row.type === "zone") {
-                  return (
+              {tableLabels.map((label, i) => (
+                <div
+                  key={label}
+                  className={cn(
+                    "relative border-b border-[#F3F3F3]",
+                    i % 2 === 1 && "bg-[#F3F3F3]/50"
+                  )}
+                  style={{ height: ROW_HEIGHT }}
+                >
+                  {hours.map((h) => (
                     <div
-                      key={`zone-row-${row.zone.id}`}
-                      className="h-7 border-b border-[#F3F3F3] bg-[#F3F3F3]/50"
+                      key={h}
+                      className="absolute top-0 h-full border-r border-[#1C1C1C]/5"
+                      style={{ left: (h - TIMELINE_START) * HOUR_WIDTH, width: HOUR_WIDTH }}
                     />
-                  )
-                }
-                return (
-                  <div
-                    key={`table-row-${row.table.id}`}
-                    className={cn(
-                      "relative border-b border-[#F3F3F3]",
-                      row.rowIndex % 2 === 1 && "bg-[#F3F3F3]/50"
-                    )}
-                    style={{ height: ROW_HEIGHT }}
-                  >
-                    {hours.map((h) => (
-                      <div
-                        key={h}
-                        className="absolute top-0 h-full border-r border-[#1C1C1C]/5"
-                        style={{ left: (h - TIMELINE_START) * HOUR_WIDTH, width: HOUR_WIDTH }}
+                  ))}
+                  {reservations
+                    .filter((r) => (r.tableLabel ?? "Без стола") === label)
+                    .map((r) => (
+                      <ReservationBlock
+                        key={r.id}
+                        reservation={r}
+                        isSelected={selectedId === r.id}
+                        onClick={(e) => handleBlockClick(r, e)}
                       />
                     ))}
-                    {reservations
-                      .filter((r) => r.tableId === row.table.id)
-                      .map((r) => (
-                        <ReservationBlock
-                          key={r.id}
-                          reservation={r}
-                          isSelected={selectedId === r.id}
-                          onClick={(e) => handleBlockClick(r, e)}
-                        />
-                      ))}
-                  </div>
-                )
-              })}
+                </div>
+              ))}
 
               {currentHours >= TIMELINE_START && currentHours <= TIMELINE_END && (
                 <div
