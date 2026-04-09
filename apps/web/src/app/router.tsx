@@ -7,16 +7,12 @@ import { ConfirmPage } from '@/pages/booking/confirm'
 import { ProfilePage } from '@/pages/profile'
 import { AuthPage } from '@/pages/auth'
 
-function RootLayout() {
-  return (
+const rootRoute = createRootRoute({
+  component: () => (
     <MobileLayout>
       <Outlet />
     </MobileLayout>
-  )
-}
-
-const rootRoute = createRootRoute({
-  component: RootLayout,
+  ),
 })
 
 const homeRoute = createRoute({

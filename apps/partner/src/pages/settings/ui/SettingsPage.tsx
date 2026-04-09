@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import { Save } from "lucide-react"
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
 import { toast } from "sonner"
@@ -131,7 +131,7 @@ export function SettingsPage() {
 
   const branchId = context?.branchId
 
-  const { data: branchData } = useQuery({
+  const { data: branchData, dataUpdatedAt } = useQuery({
     queryKey: ["admin-branch", branchId],
     queryFn: async () => {
       const { data } = await apiClient.get<BranchData>(`/admin/branches/${branchId}`)
@@ -140,16 +140,16 @@ export function SettingsPage() {
     enabled: !!branchId,
   })
 
-  useEffect(() => {
-    if (branchData) {
-      setProfile(branchToProfile(branchData))
-      setContacts(branchToContacts(branchData))
-      setWorkingHours(branchToWorkingHours(branchData))
-      setBranchPhotos(branchData.photos.sort((a, b) => a.sort_order - b.sort_order))
-      setPendingFiles([])
-      setDeletedPhotoIds([])
-    }
-  }, [branchData])
+  const [syncedAt, setSyncedAt] = useState(0)
+  if (branchData && dataUpdatedAt !== syncedAt) {
+    setSyncedAt(dataUpdatedAt)
+    setProfile(branchToProfile(branchData))
+    setContacts(branchToContacts(branchData))
+    setWorkingHours(branchToWorkingHours(branchData))
+    setBranchPhotos(branchData.photos.sort((a, b) => a.sort_order - b.sort_order))
+    setPendingFiles([])
+    setDeletedPhotoIds([])
+  }
 
   const handleFilesSelected = (files: FileList | null) => {
     if (!files) return

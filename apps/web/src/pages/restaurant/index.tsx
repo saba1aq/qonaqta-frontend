@@ -25,15 +25,6 @@ function InstagramIcon({ className }: { className?: string }) {
   )
 }
 
-function isOpenNow(schedule: { open_time: string; close_time: string; is_closed: boolean }) {
-  if (schedule.is_closed) return false
-  const now = new Date()
-  const current = now.getHours() * 60 + now.getMinutes()
-  const [oh, om] = schedule.open_time.split(':').map(Number)
-  const [ch, cm] = schedule.close_time.split(':').map(Number)
-  return current >= oh * 60 + om && current <= ch * 60 + cm
-}
-
 export function RestaurantPage() {
   const { slug } = useParams({ strict: false }) as { slug: string }
   const navigate = useNavigate()
@@ -102,7 +93,6 @@ export function RestaurantPage() {
 
   const todayDow = new Date().getDay() === 0 ? 7 : new Date().getDay()
   const todaySchedule = branch.schedules.find((s) => s.day_of_week === todayDow)
-  const openNow = todaySchedule ? isOpenNow(todaySchedule) : false
   const sorted = [...branch.schedules].sort((a, b) => a.day_of_week - b.day_of_week)
 
   return (

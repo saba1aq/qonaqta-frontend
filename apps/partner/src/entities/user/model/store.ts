@@ -26,7 +26,7 @@ export const useAuthStore = create<AuthState>((set) => ({
     const token = localStorage.getItem("admin_token")
     const userStr = localStorage.getItem("admin_user")
     if (token && userStr) {
-      try { set({ token, user: JSON.parse(userStr) }) } catch {}
+      try { set({ token, user: JSON.parse(userStr) }) } catch { /* ignore */ }
     }
   },
 }))

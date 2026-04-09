@@ -49,7 +49,7 @@ export function BookingPage() {
   const year = currentMonth.getFullYear()
   const month = currentMonth.getMonth()
 
-  const calendarDays = useMemo(() => {
+  const calendarDays = (() => {
     const firstDay = new Date(year, month, 1)
     const lastDay = new Date(year, month + 1, 0)
     const startOffset = (firstDay.getDay() + 6) % 7
@@ -58,7 +58,7 @@ export function BookingPage() {
     for (let i = 0; i < startOffset; i++) days.push(null)
     for (let d = 1; d <= lastDay.getDate(); d++) days.push(new Date(year, month, d))
     return days
-  }, [year, month])
+  })()
 
   const selectedDayOfWeek = date ? (() => {
     const d = new Date(date)

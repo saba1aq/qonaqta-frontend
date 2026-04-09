@@ -1,16 +1,8 @@
-import { useState, useEffect, useMemo } from 'react'
+import { useState } from 'react'
 import { Link } from '@tanstack/react-router'
 import { MapPin, Search } from 'lucide-react'
 import { useBranches, useCities, useCuisines } from '@/entities/restaurant'
-
-function useDebounce(value: string, delay: number) {
-  const [debounced, setDebounced] = useState(value)
-  useEffect(() => {
-    const timer = setTimeout(() => setDebounced(value), delay)
-    return () => clearTimeout(timer)
-  }, [value, delay])
-  return debounced
-}
+import { useDebounce } from '@/shared/lib/use-debounce'
 
 export function HomePage() {
   const [searchQuery, setSearchQuery] = useState('')
@@ -24,22 +16,17 @@ export function HomePage() {
 
   const { data: cities } = useCities()
   const { data: cuisines } = useCuisines()
+
+  const activeCityId = selectedCityId ?? cities?.[0]?.id
   const { data: branches, isLoading } = useBranches(
-    selectedCityId,
+    activeCityId,
     debouncedQuery || undefined,
     selectedCuisineId ? [selectedCuisineId] : undefined,
   )
 
-  useEffect(() => {
-    if (cities?.length && !selectedCityId) {
-      setSelectedCityId(cities[0].id)
-      localStorage.setItem('selected_city_id', String(cities[0].id))
-    }
-  }, [cities, selectedCityId])
+  const selectedCity = cities?.find((c) => c.id === activeCityId)
 
-  const selectedCity = cities?.find((c) => c.id === selectedCityId)
-
-  const newBranches = useMemo(() => branches?.slice(0, 5) ?? [], [branches])
+  const newBranches = branches?.slice(0, 5) ?? []
 
   const handleCitySelect = (cityId: number) => {
     setSelectedCityId(cityId)

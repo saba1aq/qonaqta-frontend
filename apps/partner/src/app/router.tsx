@@ -5,12 +5,11 @@ import {
   redirect,
   Outlet,
 } from "@tanstack/react-router"
-import { useState, type ReactNode } from "react"
 import { LoginPage } from "@/pages/login"
 import { DashboardPage } from "@/pages/dashboard"
 import { ReservationsPage } from "@/pages/reservations"
 import { SettingsPage } from "@/pages/settings"
-import { AdminLayout } from "@/widgets/admin-layout"
+import { ProtectedLayout } from "./providers/ProtectedLayout"
 
 const rootRoute = createRootRoute({
   component: () => <Outlet />,
@@ -22,15 +21,6 @@ const loginRoute = createRoute({
   component: LoginPage,
 })
 
-function ProtectedLayout({ children }: { children: ReactNode }) {
-  const [collapsed, setCollapsed] = useState(false)
-  return (
-    <AdminLayout collapsed={collapsed} onToggle={() => setCollapsed((c) => !c)}>
-      {children}
-    </AdminLayout>
-  )
-}
-
 const layoutRoute = createRoute({
   getParentRoute: () => rootRoute,
   id: "layout",
@@ -38,11 +28,7 @@ const layoutRoute = createRoute({
     const token = localStorage.getItem("admin_token")
     if (!token) throw redirect({ to: "/login" })
   },
-  component: () => (
-    <ProtectedLayout>
-      <Outlet />
-    </ProtectedLayout>
-  ),
+  component: ProtectedLayout,
 })
 
 const indexRoute = createRoute({
