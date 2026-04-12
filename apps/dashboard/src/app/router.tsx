@@ -2,31 +2,46 @@ import {
   createRouter,
   createRootRoute,
   createRoute,
+  redirect,
   Outlet,
 } from "@tanstack/react-router"
+import { LoginPage } from "@/pages/login"
+import { HomePage } from "@/pages/home"
 
 const rootRoute = createRootRoute({
   component: () => (
-    <div className="min-h-svh bg-[#F8F8F8]">
+    <div className="min-h-svh bg-neutral-50">
       <Outlet />
     </div>
   ),
 })
 
-const indexRoute = createRoute({
+const loginRoute = createRoute({
   getParentRoute: () => rootRoute,
-  path: "/",
-  component: () => (
-    <div className="flex h-svh items-center justify-center">
-      <div className="text-center">
-        <h1 className="text-2xl font-semibold text-[#1C1C1C]">Qonaqta Dashboard</h1>
-        <p className="mt-2 text-sm text-[#1C1C1C]/50">Суперадмин панель — hub.qonaqta.kz</p>
-      </div>
-    </div>
-  ),
+  path: "/login",
+  component: LoginPage,
 })
 
-const routeTree = rootRoute.addChildren([indexRoute])
+const protectedRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  id: "protected",
+  beforeLoad: () => {
+    const token = localStorage.getItem("hub_token")
+    if (!token) throw redirect({ to: "/login" })
+  },
+  component: () => <Outlet />,
+})
+
+const indexRoute = createRoute({
+  getParentRoute: () => protectedRoute,
+  path: "/",
+  component: HomePage,
+})
+
+const routeTree = rootRoute.addChildren([
+  loginRoute,
+  protectedRoute.addChildren([indexRoute]),
+])
 
 export const router = createRouter({ routeTree })
 
