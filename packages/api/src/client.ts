@@ -23,11 +23,14 @@ export function createApiClient(config: ApiClientConfig): AxiosInstance {
     (r) => r,
     (error) => {
       if (error.response?.status === 401) {
-        localStorage.removeItem(config.tokenKey)
-        for (const key of config.additionalTokenKeys ?? []) {
-          localStorage.removeItem(key)
+        const hadToken = localStorage.getItem(config.tokenKey) !== null
+        if (hadToken) {
+          localStorage.removeItem(config.tokenKey)
+          for (const key of config.additionalTokenKeys ?? []) {
+            localStorage.removeItem(key)
+          }
+          config.onUnauthorized()
         }
-        config.onUnauthorized()
       }
       return Promise.reject(error)
     }
