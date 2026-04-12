@@ -40,7 +40,7 @@ export function LoginPage() {
     try {
       const digits = phone.replace(/\D/g, "")
       const normalizedPhone = digits.startsWith("7") ? `+${digits}` : phone
-      const { data } = await apiClient.post("/admin/auth/login", {
+      const { data } = await apiClient.post("/auth/login", {
         phone: normalizedPhone,
         password,
       })
