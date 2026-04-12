@@ -6,7 +6,10 @@ import {
   Outlet,
 } from "@tanstack/react-router"
 import { LoginPage } from "@/pages/login"
-import { HomePage } from "@/pages/home"
+import { RestaurantsPage } from "@/pages/restaurants"
+import { BookingsPage } from "@/pages/bookings"
+import { UsersPage } from "@/pages/users"
+import { ProtectedLayout } from "./providers/ProtectedLayout"
 
 const rootRoute = createRootRoute({
   component: () => (
@@ -22,25 +25,37 @@ const loginRoute = createRoute({
   component: LoginPage,
 })
 
-const protectedRoute = createRoute({
+const layoutRoute = createRoute({
   getParentRoute: () => rootRoute,
-  id: "protected",
+  id: "layout",
   beforeLoad: () => {
     const token = localStorage.getItem("hub_token")
     if (!token) throw redirect({ to: "/login" })
   },
-  component: () => <Outlet />,
+  component: ProtectedLayout,
 })
 
-const indexRoute = createRoute({
-  getParentRoute: () => protectedRoute,
+const restaurantsRoute = createRoute({
+  getParentRoute: () => layoutRoute,
   path: "/",
-  component: HomePage,
+  component: RestaurantsPage,
+})
+
+const bookingsRoute = createRoute({
+  getParentRoute: () => layoutRoute,
+  path: "/bookings",
+  component: BookingsPage,
+})
+
+const usersRoute = createRoute({
+  getParentRoute: () => layoutRoute,
+  path: "/users",
+  component: UsersPage,
 })
 
 const routeTree = rootRoute.addChildren([
   loginRoute,
-  protectedRoute.addChildren([indexRoute]),
+  layoutRoute.addChildren([restaurantsRoute, bookingsRoute, usersRoute]),
 ])
 
 export const router = createRouter({ routeTree })
