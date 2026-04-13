@@ -50,7 +50,7 @@ jobs:
           script: |
             set -e
             REPO_DIR="/root/qonaqta/qonaqta-frontend"
-            REPO_URL="git@github-frontend:${{ github.repository }}.git"
+            REPO_URL="git@github-qonaqta-frontend:${{ github.repository }}.git"
 
             echo "=== Pulling latest changes ==="
             if [ -d "$REPO_DIR" ]; then
