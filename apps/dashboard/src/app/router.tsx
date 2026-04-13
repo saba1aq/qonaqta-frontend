@@ -9,6 +9,7 @@ import { LoginPage } from "@/pages/login"
 import { RestaurantsPage } from "@/pages/restaurants"
 import { BookingsPage } from "@/pages/bookings"
 import { UsersPage } from "@/pages/users"
+import { CuisinesPage } from "@/pages/cuisines"
 import { ProtectedLayout } from "./providers/ProtectedLayout"
 
 const rootRoute = createRootRoute({
@@ -53,9 +54,15 @@ const usersRoute = createRoute({
   component: UsersPage,
 })
 
+const cuisinesRoute = createRoute({
+  getParentRoute: () => layoutRoute,
+  path: "/cuisines",
+  component: CuisinesPage,
+})
+
 const routeTree = rootRoute.addChildren([
   loginRoute,
-  layoutRoute.addChildren([restaurantsRoute, bookingsRoute, usersRoute]),
+  layoutRoute.addChildren([restaurantsRoute, bookingsRoute, usersRoute, cuisinesRoute]),
 ])
 
 export const router = createRouter({ routeTree })
