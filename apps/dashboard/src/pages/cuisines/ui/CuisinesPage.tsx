@@ -1,12 +1,11 @@
 import { useState } from "react"
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
 import { toast } from "sonner"
-import { Plus, UtensilsCrossed, Search, Trash2, X, Pencil } from "lucide-react"
+import { Plus, UtensilsCrossed, Search, Trash2, X, Pencil, Check } from "lucide-react"
 import { Button } from "@qonaqta/ui/components/button"
 import { Input } from "@qonaqta/ui/components/input"
 import { Label } from "@qonaqta/ui/components/label"
 import { Badge } from "@qonaqta/ui/components/badge"
-import { Switch } from "@qonaqta/ui/components/switch"
 import { apiClient } from "@/shared/api"
 
 interface Cuisine {
@@ -143,7 +142,6 @@ function CreateCuisineModal({ onClose }: { onClose: () => void }) {
 function EditCuisineModal({ cuisine, onClose }: { cuisine: Cuisine; onClose: () => void }) {
   const [name, setName] = useState(cuisine.name)
   const [slug, setSlug] = useState(cuisine.slug)
-  const [isActive, setIsActive] = useState(cuisine.is_active)
   const queryClient = useQueryClient()
 
   const updateMutation = useMutation({
@@ -151,7 +149,6 @@ function EditCuisineModal({ cuisine, onClose }: { cuisine: Cuisine; onClose: () 
       const payload: UpdateCuisinePayload = {}
       if (name !== cuisine.name) payload.name = name
       if (slug !== cuisine.slug) payload.slug = slug
-      if (isActive !== cuisine.is_active) payload.is_active = isActive
       const { data } = await apiClient.patch(`/cuisines/${cuisine.id}`, payload)
       return data
     },
@@ -172,7 +169,7 @@ function EditCuisineModal({ cuisine, onClose }: { cuisine: Cuisine; onClose: () 
     },
   })
 
-  const hasChanges = name !== cuisine.name || slug !== cuisine.slug || isActive !== cuisine.is_active
+  const hasChanges = name !== cuisine.name || slug !== cuisine.slug
 
   return (
     <>
@@ -206,10 +203,6 @@ function EditCuisineModal({ cuisine, onClose }: { cuisine: Cuisine; onClose: () 
               />
             </div>
 
-            <div className="flex items-center justify-between rounded-xl border border-neutral-100 px-4 py-3">
-              <Label className="text-[13px] text-neutral-600">Активна</Label>
-              <Switch checked={isActive} onCheckedChange={setIsActive} />
-            </div>
           </div>
 
           <div className="mt-6 flex gap-3">
@@ -248,21 +241,37 @@ function CuisineCard({ cuisine, onEdit }: { cuisine: Cuisine; onEdit: () => void
     },
   })
 
+  const toggleActiveMutation = useMutation({
+    mutationFn: async () => {
+      const { data } = await apiClient.patch(`/cuisines/${cuisine.id}`, { is_active: !cuisine.is_active })
+      return data
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["hub-cuisines"] })
+    },
+    onError: () => {
+      toast.error("Ошибка при обновлении")
+    },
+  })
+
   return (
     <div className="group flex items-center justify-between rounded-xl border border-neutral-100 bg-white px-4 py-3 transition-all hover:border-neutral-200 hover:shadow-[0_2px_12px_rgba(0,0,0,0.04)]">
       <div className="flex items-center gap-3">
-        <div className="flex size-9 items-center justify-center rounded-lg bg-neutral-100">
-          <UtensilsCrossed className="size-4 text-neutral-500" />
-        </div>
+        <button
+          onClick={() => toggleActiveMutation.mutate()}
+          disabled={toggleActiveMutation.isPending}
+          className={`flex size-5 shrink-0 items-center justify-center rounded border transition-colors ${
+            cuisine.is_active
+              ? "border-neutral-900 bg-neutral-900"
+              : "border-neutral-300 bg-white hover:border-neutral-400"
+          }`}
+        >
+          {cuisine.is_active && <Check className="size-3.5 text-white" />}
+        </button>
         <div>
-          <div className="flex items-center gap-2">
-            <p className="text-[14px] font-medium text-neutral-900">{cuisine.name}</p>
-            {!cuisine.is_active && (
-              <Badge variant="outline" className="text-[10px] font-normal text-neutral-400">
-                неактивна
-              </Badge>
-            )}
-          </div>
+          <p className={`text-[14px] font-medium ${cuisine.is_active ? "text-neutral-900" : "text-neutral-400 line-through"}`}>
+            {cuisine.name}
+          </p>
           <Badge variant="secondary" className="mt-0.5 text-[11px] font-normal text-neutral-400">
             {cuisine.slug}
           </Badge>
