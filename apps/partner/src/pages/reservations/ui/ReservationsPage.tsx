@@ -1,70 +1,16 @@
 import { useState } from "react"
 import { ChevronLeft, ChevronRight, Plus, SlidersHorizontal } from "lucide-react"
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
 import { cn } from "@qonaqta/ui/lib/utils"
 import { Button } from "@qonaqta/ui/components/button"
-import { apiClient } from "@/shared/api"
 import type { Reservation } from "../model/types"
+import { formatDate } from "../lib/date-utils"
+import { mapApiBooking } from "../lib/mappers"
+import { useAdminContext, useBookings, useBookingActions } from "../api"
 import { TimelineView } from "./TimelineView"
-
-const DAYS = ["Воскресенье", "Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота"]
-const MONTHS = [
-  "января", "февраля", "марта", "апреля", "мая", "июня",
-  "июля", "августа", "сентября", "октября", "ноября", "декабря",
-]
-
-function formatDate(date: Date) {
-  return `${DAYS[date.getDay()]}, ${date.getDate()} ${MONTHS[date.getMonth()]} ${date.getFullYear()}`
-}
-
-function formatApiDate(date: Date) {
-  const y = date.getFullYear()
-  const m = String(date.getMonth() + 1).padStart(2, "0")
-  const d = String(date.getDate()).padStart(2, "0")
-  return `${y}-${m}-${d}`
-}
-
-interface ApiBooking {
-  id: string
-  branch_id: number
-  branch_name: string
-  guest_phone: string
-  guest_name: string
-  start_time: string
-  guests_count: number
-  status: string
-  table_label: string | null
-}
-
-function mapApiBooking(b: ApiBooking): Reservation {
-  const start = new Date(b.start_time)
-  const startTime = `${String(start.getHours()).padStart(2, "0")}:${String(start.getMinutes()).padStart(2, "0")}`
-  const endDate = new Date(start.getTime() + 2 * 60 * 60 * 1000)
-  const endTime = `${String(endDate.getHours()).padStart(2, "0")}:${String(endDate.getMinutes()).padStart(2, "0")}`
-  return {
-    id: b.id,
-    guestName: b.guest_name || "Гость",
-    guestPhone: b.guest_phone,
-    partySize: b.guests_count,
-    startTime,
-    endTime,
-    tableLabel: b.table_label ?? undefined,
-    status: (b.status as Reservation["status"]) ?? "pending",
-  }
-}
-
-async function fetchAdminContext() {
-  const { data: restaurants } = await apiClient.get("/admin/restaurants")
-  const restaurant = restaurants[0]
-  if (!restaurant) return { branchId: null }
-  const { data: branches } = await apiClient.get(`/admin/restaurants/${restaurant.id}/branches`)
-  return { branchId: branches[0]?.id ?? null }
-}
 
 export function ReservationsPage() {
   const [date, setDate] = useState(() => new Date())
   const [view, setView] = useState<"timeline" | "list">("timeline")
-  const queryClient = useQueryClient()
 
   const isToday = new Date().toDateString() === date.toDateString()
 
@@ -75,50 +21,14 @@ export function ReservationsPage() {
   const now = new Date()
   const currentTime = `${String(now.getHours()).padStart(2, "0")}:${String(now.getMinutes()).padStart(2, "0")}`
 
-  const { data: context } = useQuery({
-    queryKey: ["admin-context"],
-    queryFn: fetchAdminContext,
-    staleTime: Infinity,
-  })
-
+  const { data: context } = useAdminContext()
   const branchId = context?.branchId
 
-  const { data: apiBookings = [], isLoading } = useQuery({
-    queryKey: ["bookings", branchId, formatApiDate(date)],
-    queryFn: async () => {
-      const { data } = await apiClient.get("/admin/bookings", {
-        params: { branch_id: branchId, date: formatApiDate(date) },
-      })
-      return data as ApiBooking[]
-    },
-    enabled: !!branchId,
-  })
+  const { data: apiBookings = [], isLoading } = useBookings(branchId, date)
 
   const reservations: Reservation[] = apiBookings.map(mapApiBooking)
 
-  const invalidate = () => {
-    queryClient.invalidateQueries({ queryKey: ["bookings"] })
-  }
-
-  const confirmMutation = useMutation({
-    mutationFn: (id: string) => apiClient.post(`/admin/bookings/${id}/confirm`),
-    onSuccess: invalidate,
-  })
-
-  const cancelMutation = useMutation({
-    mutationFn: (id: string) => apiClient.post(`/admin/bookings/${id}/cancel`),
-    onSuccess: invalidate,
-  })
-
-  const noShowMutation = useMutation({
-    mutationFn: (id: string) => apiClient.post(`/admin/bookings/${id}/no-show`),
-    onSuccess: invalidate,
-  })
-
-  const completeMutation = useMutation({
-    mutationFn: (id: string) => apiClient.post(`/admin/bookings/${id}/complete`),
-    onSuccess: invalidate,
-  })
+  const { confirmMutation, cancelMutation, noShowMutation, completeMutation } = useBookingActions()
 
   const todayCount = reservations.length
 

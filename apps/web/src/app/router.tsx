@@ -2,8 +2,7 @@ import { createRouter, createRoute, createRootRoute, Outlet } from '@tanstack/re
 import { MobileLayout } from './providers/mobile-layout'
 import { HomePage } from '@/pages/home'
 import { RestaurantPage } from '@/pages/restaurant'
-import { BookingPage } from '@/pages/booking'
-import { ConfirmPage } from '@/pages/booking/confirm'
+import { BookingPage, ConfirmPage } from '@/pages/booking'
 import { ProfilePage } from '@/pages/profile'
 import { AuthPage } from '@/pages/auth'
 

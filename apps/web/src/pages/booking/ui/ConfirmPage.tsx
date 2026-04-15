@@ -1,12 +1,14 @@
 import { useState } from 'react'
 import { useParams, Link, useNavigate } from '@tanstack/react-router'
-import { ArrowLeft, CheckCircle2, CalendarDays, Users, MapPin } from 'lucide-react'
+import { ArrowLeft } from 'lucide-react'
 import { useBranchDetail } from '@/entities/restaurant'
 import { useCreateBooking } from '@/entities/booking'
 import { useBookingFormStore } from '@/features/book-table'
 import { useAuthStore } from '@/entities/user'
 import { Button } from '@qonaqta/ui/components/button'
 import { Input } from '@qonaqta/ui/components/input'
+import { BookingSuccess } from './BookingSuccess'
+import { BookingSummary } from './BookingSummary'
 
 export function ConfirmPage() {
   const { slug } = useParams({ strict: false }) as { slug: string }
@@ -61,22 +63,15 @@ export function ConfirmPage() {
 
   if (success) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-screen px-6 text-center">
-        <CheckCircle2 className="w-16 h-16 text-green-500 mb-4" />
-        <h2 className="text-xl font-bold mb-2">Бронь подтверждена!</h2>
-        <p className="text-sm text-muted-foreground mb-6">
-          {branch?.name} — {formattedDate}, {timeSlot}
-        </p>
-        <Button
-          className="w-full h-12 rounded-xl text-sm font-semibold"
-          onClick={() => {
-            reset()
-            navigate({ to: '/' })
-          }}
-        >
-          На главную
-        </Button>
-      </div>
+      <BookingSuccess
+        branchName={branch?.name}
+        formattedDate={formattedDate}
+        timeSlot={timeSlot}
+        onGoHome={() => {
+          reset()
+          navigate({ to: '/' })
+        }}
+      />
     )
   }
 
@@ -97,48 +92,14 @@ export function ConfirmPage() {
 
       <div className="p-4 space-y-4">
         {branch && (
-          <div className="flex gap-3 items-center p-3 bg-secondary rounded-xl">
-            {branch.cover_image_url ? (
-              <img
-                src={branch.cover_image_url}
-                alt={branch.name}
-                className="w-14 h-14 rounded-lg object-cover"
-              />
-            ) : (
-              <div className="w-14 h-14 rounded-lg bg-muted" />
-            )}
-            <div>
-              <p className="text-sm font-semibold">{branch.name}</p>
-              <p className="text-xs text-muted-foreground flex items-center gap-1">
-                <MapPin className="w-3 h-3" />
-                {branch.address}
-              </p>
-            </div>
-          </div>
+          <BookingSummary
+            branch={branch}
+            formattedDate={formattedDate}
+            timeSlot={timeSlot}
+            guestCount={guestCount}
+            slug={slug}
+          />
         )}
-
-        <div className="bg-secondary rounded-xl p-4 space-y-3">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2 text-sm">
-              <CalendarDays className="w-4 h-4 text-muted-foreground" />
-              <span>
-                {formattedDate}, {timeSlot}
-              </span>
-            </div>
-            <Link
-              to="/restaurant/$slug/book"
-              params={{ slug }}
-              className="text-xs text-primary underline"
-            >
-              Изменить
-            </Link>
-          </div>
-
-          <div className="flex items-center gap-2 text-sm">
-            <Users className="w-4 h-4 text-muted-foreground" />
-            <span>{guestCount} гостей</span>
-          </div>
-        </div>
 
         <div className="space-y-3">
           <div>

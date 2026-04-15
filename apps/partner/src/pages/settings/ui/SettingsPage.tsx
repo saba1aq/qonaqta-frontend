@@ -1,117 +1,12 @@
 import { useState } from "react"
 import { Save } from "lucide-react"
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
-import { toast } from "sonner"
 import { Button } from "@qonaqta/ui/components/button"
-import { apiClient } from "@/shared/api"
 import type { ContactsData, ProfileData, WorkingHoursData } from "../model/types"
-import { DEFAULT_CONTACTS, DEFAULT_PROFILE, DEFAULT_WORKING_HOURS, DAYS_ORDER } from "../model/constants"
+import { DEFAULT_CONTACTS, DEFAULT_PROFILE, DEFAULT_WORKING_HOURS } from "../model/constants"
+import type { BranchPhoto } from "../lib/mappers"
+import { branchToProfile, branchToContacts, branchToWorkingHours } from "../lib/mappers"
+import { useBranchContext, useBranchData, useSaveSettings } from "../api"
 import { ProfileTab } from "./ProfileTab"
-
-interface BranchPhoto {
-  id: number
-  image_url: string
-  sort_order: number
-}
-
-interface BranchSchedule {
-  id: number
-  day_of_week: number
-  open_time: string
-  close_time: string
-  is_closed: boolean
-}
-
-interface BranchCuisine {
-  id: number
-  name: string
-  slug: string
-}
-
-interface BranchData {
-  id: number
-  restaurant_id: number
-  name: string
-  slug: string
-  address: string
-  phone: string | null
-  description: string | null
-  instagram: string | null
-  telegram: string | null
-  tiktok: string | null
-  whatsapp: string | null
-  website: string | null
-  two_gis: string | null
-  photos: BranchPhoto[]
-  schedules: BranchSchedule[]
-  cuisines: BranchCuisine[]
-}
-
-async function fetchBranchContext() {
-  const { data: restaurants } = await apiClient.get("/admin/restaurants")
-  const restaurant = restaurants[0]
-  if (!restaurant) return { branchId: null, restaurantId: null }
-  const { data: branches } = await apiClient.get("/admin/branches")
-  const branch = branches.find((b: { restaurant_id: number }) => b.restaurant_id === restaurant.id)
-  return { branchId: branch?.id ?? null, restaurantId: restaurant.id }
-}
-
-function branchToProfile(branch: BranchData): ProfileData {
-  return {
-    ...DEFAULT_PROFILE,
-    name: branch.name ?? "",
-    description: branch.description ?? "",
-    address: branch.address ?? "",
-    cuisineTypes: branch.cuisines.map((c) => c.name),
-    socialInstagram: branch.instagram ?? "",
-    socialWebsite: branch.website ?? "",
-    social2gis: branch.two_gis ?? "",
-    socialGoogleMaps: "",
-    photos: branch.photos
-      .sort((a, b) => a.sort_order - b.sort_order)
-      .map((p) => p.image_url),
-  }
-}
-
-function branchToContacts(branch: BranchData): ContactsData {
-  return {
-    phone: branch.phone ?? "",
-    whatsapp: branch.whatsapp ?? "",
-    instagram: branch.instagram ?? "",
-    tiktok: branch.tiktok ?? "",
-  }
-}
-
-function branchToWorkingHours(branch: BranchData): WorkingHoursData {
-  if (branch.schedules.length === 0) return DEFAULT_WORKING_HOURS
-
-  const dayMap: Record<number, BranchSchedule> = {}
-  for (const s of branch.schedules) {
-    dayMap[s.day_of_week] = s
-  }
-
-  const days: WorkingHoursData["days"] = {} as WorkingHoursData["days"]
-  DAYS_ORDER.forEach((day, i) => {
-    const s = dayMap[i]
-    if (s) {
-      days[day] = { open: s.open_time, close: s.close_time, enabled: !s.is_closed }
-    } else {
-      days[day] = { open: "09:00", close: "23:00", enabled: true }
-    }
-  })
-
-  const allSame = DAYS_ORDER.every(
-    (d) => days[d].open === days[DAYS_ORDER[0]].open &&
-           days[d].close === days[DAYS_ORDER[0]].close &&
-           days[d].enabled === days[DAYS_ORDER[0]].enabled
-  )
-
-  return {
-    sameForAll: allSame,
-    allDays: { open: days[DAYS_ORDER[0]].open, close: days[DAYS_ORDER[0]].close },
-    days,
-  }
-}
 
 export function SettingsPage() {
   const [profile, setProfile] = useState<ProfileData>(DEFAULT_PROFILE)
@@ -121,24 +16,10 @@ export function SettingsPage() {
   const [deletedPhotoIds, setDeletedPhotoIds] = useState<number[]>([])
   const [branchPhotos, setBranchPhotos] = useState<BranchPhoto[]>([])
 
-  const queryClient = useQueryClient()
-
-  const { data: context } = useQuery({
-    queryKey: ["admin-context"],
-    queryFn: fetchBranchContext,
-    staleTime: Infinity,
-  })
-
+  const { data: context } = useBranchContext()
   const branchId = context?.branchId
 
-  const { data: branchData, dataUpdatedAt } = useQuery({
-    queryKey: ["admin-branch", branchId],
-    queryFn: async () => {
-      const { data } = await apiClient.get<BranchData>(`/admin/branches/${branchId}`)
-      return data
-    },
-    enabled: !!branchId,
-  })
+  const { data: branchData, dataUpdatedAt } = useBranchData(branchId)
 
   const [syncedAt, setSyncedAt] = useState(0)
   if (branchData && dataUpdatedAt !== syncedAt) {
@@ -150,6 +31,14 @@ export function SettingsPage() {
     setPendingFiles([])
     setDeletedPhotoIds([])
   }
+
+  const saveMutation = useSaveSettings(branchId, () => ({
+    profile,
+    contacts,
+    workingHours,
+    pendingFiles,
+    deletedPhotoIds,
+  }))
 
   const handleFilesSelected = (files: FileList | null) => {
     if (!files) return
@@ -174,62 +63,6 @@ export function SettingsPage() {
     }
     setProfile((prev) => ({ ...prev, photos: prev.photos.filter((_, i) => i !== index) }))
   }
-
-  const saveMutation = useMutation({
-    mutationFn: async () => {
-      if (!branchId) return
-
-      await apiClient.put(`/admin/branches/${branchId}`, {
-        name: profile.name,
-        description: profile.description,
-        address: profile.address,
-        phone: contacts.phone,
-        instagram: contacts.instagram,
-        tiktok: contacts.tiktok,
-        whatsapp: contacts.whatsapp,
-        website: profile.socialWebsite,
-        two_gis: profile.social2gis,
-      })
-
-      for (const photoId of deletedPhotoIds) {
-        await apiClient.delete(`/admin/branches/${branchId}/photos/${photoId}`)
-      }
-
-      for (const file of pendingFiles) {
-        const formData = new FormData()
-        formData.append("file", file)
-        await apiClient.post(`/admin/branches/${branchId}/photos`, formData, {
-          headers: { "Content-Type": "multipart/form-data" },
-        })
-      }
-
-      const schedules = DAYS_ORDER.map((day, i) => {
-        if (workingHours.sameForAll) {
-          return {
-            day_of_week: i,
-            open_time: workingHours.allDays.open,
-            close_time: workingHours.allDays.close,
-            is_closed: false,
-          }
-        }
-        const s = workingHours.days[day]
-        return {
-          day_of_week: i,
-          open_time: s.open,
-          close_time: s.close,
-          is_closed: !s.enabled,
-        }
-      })
-      await apiClient.put(`/admin/branches/${branchId}/schedules`, { schedules })
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["admin-branch", branchId] })
-      toast.success("Настройки сохранены")
-    },
-    onError: () => {
-      toast.error("Ошибка при сохранении")
-    },
-  })
 
   const updateProfile = (updates: Partial<ProfileData>) => {
     setProfile((prev) => ({ ...prev, ...updates }))
