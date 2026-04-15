@@ -16,7 +16,7 @@ export function useCuisines() {
   return useQuery<Cuisine[]>({
     queryKey: ['cuisines'],
     queryFn: async () => {
-      const { data } = await apiClient.get<Cuisine[]>('/cuisines')
+      const { data } = await apiClient.get<Cuisine[]>('/cuisines', { params: { is_active: true } })
       return data
     },
   })

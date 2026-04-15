@@ -1,17 +1,25 @@
 import { useState } from "react"
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
 import { toast } from "sonner"
-import { Plus, UtensilsCrossed, Search, Trash2, X } from "lucide-react"
+import { Plus, UtensilsCrossed, Search, Trash2, X, Pencil } from "lucide-react"
 import { Button } from "@qonaqta/ui/components/button"
 import { Input } from "@qonaqta/ui/components/input"
 import { Label } from "@qonaqta/ui/components/label"
 import { Badge } from "@qonaqta/ui/components/badge"
+import { Switch } from "@qonaqta/ui/components/switch"
 import { apiClient } from "@/shared/api"
 
 interface Cuisine {
   id: number
   name: string
   slug: string
+  is_active: boolean
+}
+
+interface UpdateCuisinePayload {
+  name?: string
+  slug?: string
+  is_active?: boolean
 }
 
 function useCuisines() {
@@ -132,7 +140,101 @@ function CreateCuisineModal({ onClose }: { onClose: () => void }) {
   )
 }
 
-function CuisineCard({ cuisine }: { cuisine: Cuisine }) {
+function EditCuisineModal({ cuisine, onClose }: { cuisine: Cuisine; onClose: () => void }) {
+  const [name, setName] = useState(cuisine.name)
+  const [slug, setSlug] = useState(cuisine.slug)
+  const [isActive, setIsActive] = useState(cuisine.is_active)
+  const queryClient = useQueryClient()
+
+  const updateMutation = useMutation({
+    mutationFn: async () => {
+      const payload: UpdateCuisinePayload = {}
+      if (name !== cuisine.name) payload.name = name
+      if (slug !== cuisine.slug) payload.slug = slug
+      if (isActive !== cuisine.is_active) payload.is_active = isActive
+      const { data } = await apiClient.patch(`/cuisines/${cuisine.id}`, payload)
+      return data
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["hub-cuisines"] })
+      toast.success("Кухня обновлена")
+      onClose()
+    },
+    onError: (err: unknown) => {
+      const status = (err as { response?: { status?: number } })?.response?.status
+      if (status === 409) {
+        toast.error(`Кухня со slug '${slug}' уже существует`)
+      } else if (status === 404) {
+        toast.error("Кухня не найдена")
+      } else {
+        toast.error("Ошибка при обновлении")
+      }
+    },
+  })
+
+  const hasChanges = name !== cuisine.name || slug !== cuisine.slug || isActive !== cuisine.is_active
+
+  return (
+    <>
+      <div className="fixed inset-0 z-50 bg-black/30 backdrop-blur-sm" onClick={onClose} />
+      <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+        <div className="w-full max-w-[440px] rounded-2xl bg-white p-6 shadow-xl" onClick={(e) => e.stopPropagation()}>
+          <div className="flex items-center justify-between">
+            <h2 className="text-lg font-semibold text-neutral-900">Редактировать кухню</h2>
+            <button onClick={onClose} className="flex size-8 items-center justify-center rounded-lg text-neutral-400 hover:bg-neutral-50">
+              <X className="size-4" />
+            </button>
+          </div>
+
+          <div className="mt-5 space-y-4">
+            <div className="space-y-1.5">
+              <Label className="text-[13px] text-neutral-600">Название</Label>
+              <Input
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                className="h-10 rounded-xl text-[14px]"
+                autoFocus
+              />
+            </div>
+
+            <div className="space-y-1.5">
+              <Label className="text-[13px] text-neutral-600">Slug</Label>
+              <Input
+                value={slug}
+                onChange={(e) => setSlug(e.target.value)}
+                className="h-10 rounded-xl font-mono text-[13px]"
+              />
+            </div>
+
+            <div className="flex items-center justify-between rounded-xl border border-neutral-100 px-4 py-3">
+              <Label className="text-[13px] text-neutral-600">Активна</Label>
+              <Switch checked={isActive} onCheckedChange={setIsActive} />
+            </div>
+          </div>
+
+          <div className="mt-6 flex gap-3">
+            <Button
+              variant="outline"
+              onClick={onClose}
+              className="flex-1 rounded-xl text-[13px]"
+            >
+              Отмена
+            </Button>
+            <Button
+              disabled={!name || !slug || !hasChanges || updateMutation.isPending}
+              onClick={() => updateMutation.mutate()}
+              className="flex-1 rounded-xl bg-neutral-900 text-[13px] text-white hover:bg-neutral-800"
+            >
+              {updateMutation.isPending ? "Сохранение..." : "Сохранить"}
+            </Button>
+          </div>
+        </div>
+      </div>
+    </>
+  )
+}
+
+function CuisineCard({ cuisine, onEdit }: { cuisine: Cuisine; onEdit: () => void }) {
   const queryClient = useQueryClient()
 
   const deleteMutation = useMutation({
@@ -153,19 +255,34 @@ function CuisineCard({ cuisine }: { cuisine: Cuisine }) {
           <UtensilsCrossed className="size-4 text-neutral-500" />
         </div>
         <div>
-          <p className="text-[14px] font-medium text-neutral-900">{cuisine.name}</p>
+          <div className="flex items-center gap-2">
+            <p className="text-[14px] font-medium text-neutral-900">{cuisine.name}</p>
+            {!cuisine.is_active && (
+              <Badge variant="outline" className="text-[10px] font-normal text-neutral-400">
+                неактивна
+              </Badge>
+            )}
+          </div>
           <Badge variant="secondary" className="mt-0.5 text-[11px] font-normal text-neutral-400">
             {cuisine.slug}
           </Badge>
         </div>
       </div>
-      <button
-        onClick={() => deleteMutation.mutate()}
-        disabled={deleteMutation.isPending}
-        className="flex size-8 items-center justify-center rounded-lg text-neutral-300 opacity-0 transition-all hover:bg-red-50 hover:text-red-500 group-hover:opacity-100"
-      >
-        <Trash2 className="size-4" />
-      </button>
+      <div className="flex items-center gap-1 opacity-0 transition-all group-hover:opacity-100">
+        <button
+          onClick={onEdit}
+          className="flex size-8 items-center justify-center rounded-lg text-neutral-300 transition-all hover:bg-neutral-50 hover:text-neutral-600"
+        >
+          <Pencil className="size-4" />
+        </button>
+        <button
+          onClick={() => deleteMutation.mutate()}
+          disabled={deleteMutation.isPending}
+          className="flex size-8 items-center justify-center rounded-lg text-neutral-300 transition-all hover:bg-red-50 hover:text-red-500"
+        >
+          <Trash2 className="size-4" />
+        </button>
+      </div>
     </div>
   )
 }
@@ -197,6 +314,7 @@ export function CuisinesPage() {
   const { data: cuisines, isLoading } = useCuisines()
   const [search, setSearch] = useState("")
   const [showCreate, setShowCreate] = useState(false)
+  const [editingCuisine, setEditingCuisine] = useState<Cuisine | null>(null)
 
   const filtered = cuisines?.filter((c) =>
     c.name.toLowerCase().includes(search.toLowerCase()) ||
@@ -258,12 +376,13 @@ export function CuisinesPage() {
       ) : (
         <div className="mt-6 space-y-2">
           {filtered.map((cuisine) => (
-            <CuisineCard key={cuisine.id} cuisine={cuisine} />
+            <CuisineCard key={cuisine.id} cuisine={cuisine} onEdit={() => setEditingCuisine(cuisine)} />
           ))}
         </div>
       )}
 
       {showCreate && <CreateCuisineModal onClose={() => setShowCreate(false)} />}
+      {editingCuisine && <EditCuisineModal cuisine={editingCuisine} onClose={() => setEditingCuisine(null)} />}
     </div>
   )
 }
