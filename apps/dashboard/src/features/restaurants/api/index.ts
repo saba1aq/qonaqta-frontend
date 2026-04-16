@@ -15,7 +15,7 @@ export function useRestaurants() {
   return useQuery<Restaurant[]>({
     queryKey: QUERY_KEY,
     queryFn: async () => {
-      const { data } = await apiClient.get("/admin/restaurants")
+      const { data } = await apiClient.get("/brands")
       return data
     },
   })
