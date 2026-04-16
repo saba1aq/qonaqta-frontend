@@ -59,8 +59,8 @@ export function CuisinesPage() {
       )}
 
       {isLoading ? (
-        <div className="mt-6 space-y-3">
-          {[1, 2, 3, 4].map((i) => (
+        <div className="mt-6 grid grid-cols-1 gap-2 md:grid-cols-2 lg:grid-cols-3">
+          {[1, 2, 3, 4, 5, 6].map((i) => (
             <div key={i} className="h-[60px] animate-pulse rounded-xl bg-neutral-100" />
           ))}
         </div>
@@ -75,7 +75,7 @@ export function CuisinesPage() {
           <CuisinesEmptyState onCreate={() => setShowCreate(true)} />
         )
       ) : (
-        <div className="mt-6 space-y-2">
+        <div className="mt-6 grid grid-cols-1 gap-2 md:grid-cols-2 lg:grid-cols-3">
           {filtered.map((cuisine) => (
             <CuisineCard key={cuisine.id} cuisine={cuisine} onEdit={() => setEditingCuisine(cuisine)} />
           ))}

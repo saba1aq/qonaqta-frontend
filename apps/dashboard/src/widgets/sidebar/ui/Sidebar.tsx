@@ -2,7 +2,6 @@ import { Link, useRouterState, useRouter } from "@tanstack/react-router"
 import {
   Store,
   CalendarCheck,
-  Users,
   UtensilsCrossed,
   LogOut,
   ChevronLeft,
@@ -17,10 +16,9 @@ interface SidebarProps {
 }
 
 const navItems = [
-  { path: "/", label: "Рестораны", icon: Store, exact: true },
+  { path: "/brands", label: "Бренды", icon: Store, exact: false },
   { path: "/cuisines", label: "Кухни", icon: UtensilsCrossed, exact: false },
   { path: "/bookings", label: "Брони", icon: CalendarCheck, exact: false },
-  { path: "/users", label: "Пользователи", icon: Users, exact: false },
 ]
 
 export function Sidebar({ collapsed, onToggle }: SidebarProps) {

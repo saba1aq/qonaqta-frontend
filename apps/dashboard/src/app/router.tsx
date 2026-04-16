@@ -6,9 +6,9 @@ import {
   Outlet,
 } from "@tanstack/react-router"
 import { LoginPage } from "@/pages/login"
-import { RestaurantsPage } from "@/pages/restaurants"
+import { BrandsPage } from "@/pages/brands"
+import { BrandDetailPage } from "@/pages/brand-detail"
 import { BookingsPage } from "@/pages/bookings"
-import { UsersPage } from "@/pages/users"
 import { CuisinesPage } from "@/pages/cuisines"
 import { ProtectedLayout } from "./providers/ProtectedLayout"
 
@@ -36,22 +36,30 @@ const layoutRoute = createRoute({
   component: ProtectedLayout,
 })
 
-const restaurantsRoute = createRoute({
+const indexRedirectRoute = createRoute({
   getParentRoute: () => layoutRoute,
   path: "/",
-  component: RestaurantsPage,
+  beforeLoad: () => {
+    throw redirect({ to: "/brands" })
+  },
+})
+
+const brandsRoute = createRoute({
+  getParentRoute: () => layoutRoute,
+  path: "/brands",
+  component: BrandsPage,
+})
+
+const brandDetailRoute = createRoute({
+  getParentRoute: () => layoutRoute,
+  path: "/brands/$brandId",
+  component: BrandDetailPage,
 })
 
 const bookingsRoute = createRoute({
   getParentRoute: () => layoutRoute,
   path: "/bookings",
   component: BookingsPage,
-})
-
-const usersRoute = createRoute({
-  getParentRoute: () => layoutRoute,
-  path: "/users",
-  component: UsersPage,
 })
 
 const cuisinesRoute = createRoute({
@@ -62,7 +70,13 @@ const cuisinesRoute = createRoute({
 
 const routeTree = rootRoute.addChildren([
   loginRoute,
-  layoutRoute.addChildren([restaurantsRoute, bookingsRoute, usersRoute, cuisinesRoute]),
+  layoutRoute.addChildren([
+    indexRedirectRoute,
+    brandsRoute,
+    brandDetailRoute,
+    bookingsRoute,
+    cuisinesRoute,
+  ]),
 ])
 
 export const router = createRouter({ routeTree })

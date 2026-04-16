@@ -1,6 +1,0 @@
-export { useRestaurants } from "./api"
-export { RestaurantCard } from "./ui/RestaurantCard"
-export { CreateRestaurantModal } from "./ui/CreateRestaurantModal"
-export { EditRestaurantModal } from "./ui/EditRestaurantModal"
-export { RestaurantsEmptyState } from "./ui/EmptyState"
-export type { Restaurant } from "./model/types"
