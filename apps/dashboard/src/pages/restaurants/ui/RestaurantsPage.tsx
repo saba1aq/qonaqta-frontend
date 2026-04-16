@@ -6,13 +6,16 @@ import {
   useRestaurants,
   RestaurantCard,
   CreateRestaurantModal,
+  EditRestaurantModal,
   RestaurantsEmptyState,
+  type Restaurant,
 } from "@/features/restaurants"
 
 export function RestaurantsPage() {
   const { data: restaurants, isLoading } = useRestaurants()
   const [search, setSearch] = useState("")
   const [showCreate, setShowCreate] = useState(false)
+  const [editingRestaurant, setEditingRestaurant] = useState<Restaurant | null>(null)
 
   const filtered = restaurants?.filter((r) =>
     r.name.toLowerCase().includes(search.toLowerCase())
@@ -73,12 +76,22 @@ export function RestaurantsPage() {
       ) : (
         <div className="mt-6 grid grid-cols-1 gap-4 xl:grid-cols-2 2xl:grid-cols-3">
           {filtered.map((restaurant) => (
-            <RestaurantCard key={restaurant.id} restaurant={restaurant} />
+            <RestaurantCard
+              key={restaurant.id}
+              restaurant={restaurant}
+              onEdit={() => setEditingRestaurant(restaurant)}
+            />
           ))}
         </div>
       )}
 
       {showCreate && <CreateRestaurantModal onClose={() => setShowCreate(false)} />}
+      {editingRestaurant && (
+        <EditRestaurantModal
+          restaurant={editingRestaurant}
+          onClose={() => setEditingRestaurant(null)}
+        />
+      )}
     </div>
   )
 }

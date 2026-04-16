@@ -1,11 +1,11 @@
 import { useState } from "react"
-import { MapPin, ChevronRight, MoreHorizontal, Power, Trash2 } from "lucide-react"
+import { MapPin, ChevronRight, MoreHorizontal, Pencil, Power, Trash2 } from "lucide-react"
 import { cn } from "@qonaqta/ui/lib/utils"
 import { formatDate } from "@/shared/lib/format-date"
 import { useDeleteRestaurant } from "../api"
 import type { Restaurant } from "../model/types"
 
-export function RestaurantCard({ restaurant }: { restaurant: Restaurant }) {
+export function RestaurantCard({ restaurant, onEdit }: { restaurant: Restaurant; onEdit: () => void }) {
   const [menuOpen, setMenuOpen] = useState(false)
   const branchCount = restaurant.branches?.length ?? 0
   const activeBranches = restaurant.branches?.filter((b) => b.is_active).length ?? 0
@@ -42,6 +42,13 @@ export function RestaurantCard({ restaurant }: { restaurant: Restaurant }) {
             <>
               <div className="fixed inset-0 z-40" onClick={() => setMenuOpen(false)} />
               <div className="absolute right-0 top-9 z-50 w-44 rounded-xl border border-neutral-100 bg-white py-1.5 shadow-lg">
+                <button
+                  onClick={() => { onEdit(); setMenuOpen(false) }}
+                  className="flex w-full items-center gap-2.5 px-3.5 py-2 text-[13px] text-neutral-600 transition-colors hover:bg-neutral-50"
+                >
+                  <Pencil className="size-3.5" />
+                  Редактировать
+                </button>
                 <button
                   onClick={() => { setMenuOpen(false) }}
                   className="flex w-full items-center gap-2.5 px-3.5 py-2 text-[13px] text-neutral-600 transition-colors hover:bg-neutral-50"
