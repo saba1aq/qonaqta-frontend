@@ -1,5 +1,5 @@
 import { useState, useMemo, useRef, useEffect } from "react"
-import { CalendarCheck } from "lucide-react"
+import { CalendarCheck, Users } from "lucide-react"
 import { cn } from "@qonaqta/ui/lib/utils"
 import {
   useAdminBookings,
