@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react"
+import { useState, useRef } from "react"
 import { Link, useParams } from "@tanstack/react-router"
 import { ArrowLeft, X, Upload, Save } from "lucide-react"
 import { Button } from "@qonaqta/ui/components/button"
@@ -33,23 +33,6 @@ function BasicInfoSection({ restaurant, cities }: { restaurant: RestaurantDetail
     two_gis: restaurant.two_gis ?? "",
     is_active: restaurant.is_active,
   })
-
-  useEffect(() => {
-    setForm({
-      name: restaurant.name,
-      city_id: restaurant.city_id,
-      address: restaurant.address,
-      phone: restaurant.phone ?? "",
-      description: restaurant.description ?? "",
-      instagram: restaurant.instagram ?? "",
-      telegram: restaurant.telegram ?? "",
-      tiktok: restaurant.tiktok ?? "",
-      whatsapp: restaurant.whatsapp ?? "",
-      website: restaurant.website ?? "",
-      two_gis: restaurant.two_gis ?? "",
-      is_active: restaurant.is_active,
-    })
-  }, [restaurant])
 
   const updateMutation = useUpdateRestaurant()
 
@@ -168,10 +151,6 @@ function CuisinesSection({ restaurant }: { restaurant: RestaurantDetail }) {
   const { data: allCuisines } = useCuisines()
   const [selectedIds, setSelectedIds] = useState<number[]>(restaurant.cuisines.map((c) => c.id))
   const updateMutation = useUpdateRestaurant()
-
-  useEffect(() => {
-    setSelectedIds(restaurant.cuisines.map((c) => c.id))
-  }, [restaurant.cuisines])
 
   const toggle = (id: number) => {
     setSelectedIds((prev) =>
@@ -293,20 +272,6 @@ function ScheduleSection({ restaurant }: { restaurant: RestaurantDetail }) {
       }
     })
   )
-
-  useEffect(() => {
-    setRows(
-      DAY_NAMES.map((_, i) => {
-        const existing = restaurant.schedules.find((s) => s.day_of_week === i)
-        return {
-          day_of_week: i,
-          open_time: existing?.open_time ?? "09:00",
-          close_time: existing?.close_time ?? "22:00",
-          is_closed: existing?.is_closed ?? false,
-        }
-      })
-    )
-  }, [restaurant.schedules])
 
   const updateSchedulesMutation = useUpdateSchedules()
 
@@ -441,10 +406,10 @@ export function RestaurantDetailPage() {
       </div>
 
       <div className="mt-8 space-y-6">
-        <BasicInfoSection restaurant={restaurant} cities={cities ?? []} />
-        <CuisinesSection restaurant={restaurant} />
-        <PhotosSection restaurant={restaurant} />
-        <ScheduleSection restaurant={restaurant} />
+        <BasicInfoSection key={`info-${restaurant.id}`} restaurant={restaurant} cities={cities ?? []} />
+        <CuisinesSection key={`cuisines-${restaurant.id}`} restaurant={restaurant} />
+        <PhotosSection key={`photos-${restaurant.id}`} restaurant={restaurant} />
+        <ScheduleSection key={`schedule-${restaurant.id}`} restaurant={restaurant} />
       </div>
     </div>
   )
