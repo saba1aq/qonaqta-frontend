@@ -24,7 +24,7 @@ export function ActionButtons({ branch }: { branch: BranchDetail }) {
         </a>
       )}
       <a
-        href={branch.two_gis}
+        href={branch.two_gis ?? undefined}
         target="_blank"
         rel="noopener noreferrer"
         className="flex-1 flex flex-col items-center gap-1.5 py-3.5 rounded-2xl bg-neutral-50 active:bg-neutral-100 transition-colors"
