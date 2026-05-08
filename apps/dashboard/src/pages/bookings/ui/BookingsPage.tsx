@@ -1,5 +1,5 @@
 import { useState, useMemo, useRef, useEffect } from "react"
-import { CalendarCheck, ChevronLeft, ChevronRight, Users } from "lucide-react"
+import { CalendarCheck } from "lucide-react"
 import { cn } from "@qonaqta/ui/lib/utils"
 import {
   useAdminBookings,
@@ -8,33 +8,6 @@ import {
   type BookingStatus,
 } from "@/features/bookings"
 import { useRestaurants } from "@/features/restaurants"
-
-const DAYS_SHORT = ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"]
-const MONTHS = [
-  "Январь", "Февраль", "Март", "Апрель", "Май", "Июнь",
-  "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь",
-]
-
-function pad(n: number) {
-  return n.toString().padStart(2, "0")
-}
-
-function formatDate(year: number, month: number, day: number) {
-  return `${year}-${pad(month + 1)}-${pad(day)}`
-}
-
-function getCalendarDays(year: number, month: number) {
-  const first = new Date(year, month, 1)
-  const lastDay = new Date(year, month + 1, 0).getDate()
-  let startDow = first.getDay()
-  startDow = startDow === 0 ? 6 : startDow - 1
-
-  const days: (number | null)[] = []
-  for (let i = 0; i < startDow; i++) days.push(null)
-  for (let d = 1; d <= lastDay; d++) days.push(d)
-  while (days.length % 7 !== 0) days.push(null)
-  return days
-}
 
 function StatusSelect({ value, bookingId }: { value: BookingStatus; bookingId: string }) {
   const [open, setOpen] = useState(false)
@@ -88,9 +61,6 @@ function StatusSelect({ value, bookingId }: { value: BookingStatus; bookingId: s
 }
 
 export function BookingsPage() {
-  const today = new Date()
-  const [calYear, setCalYear] = useState(today.getFullYear())
-  const [calMonth, setCalMonth] = useState(today.getMonth())
   const [selectedDate, setSelectedDate] = useState<string | undefined>(undefined)
   const [statusFilter, setStatusFilter] = useState<BookingStatus | "">("")
   const [branchFilter, setBranchFilter] = useState<number | "">("")
@@ -105,35 +75,6 @@ export function BookingsPage() {
 
   const { data: bookings, isLoading } = useAdminBookings(filters as never)
   const { data: restaurants } = useRestaurants()
-
-  const monthBookingsFilters = useMemo(() => {
-    const f: Record<string, unknown> = { limit: 500 }
-    if (branchFilter) f.branch_id = branchFilter
-    return f
-  }, [branchFilter])
-
-  const { data: monthBookings } = useAdminBookings(monthBookingsFilters as never)
-
-  const bookingCountByDay = useMemo(() => {
-    const map: Record<string, number> = {}
-    monthBookings?.forEach((b) => {
-      map[b.date] = (map[b.date] || 0) + 1
-    })
-    return map
-  }, [monthBookings])
-
-  const calendarDays = useMemo(() => getCalendarDays(calYear, calMonth), [calYear, calMonth])
-  const todayStr = formatDate(today.getFullYear(), today.getMonth(), today.getDate())
-
-  const prevMonth = () => {
-    if (calMonth === 0) { setCalMonth(11); setCalYear(calYear - 1) }
-    else setCalMonth(calMonth - 1)
-  }
-
-  const nextMonth = () => {
-    if (calMonth === 11) { setCalMonth(0); setCalYear(calYear + 1) }
-    else setCalMonth(calMonth + 1)
-  }
 
   const restaurantMap = useMemo(() => {
     const map: Record<number, string> = {}
