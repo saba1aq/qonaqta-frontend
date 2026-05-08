@@ -22,19 +22,19 @@ const homeRoute = createRoute({
 
 const restaurantRoute = createRoute({
   getParentRoute: () => rootRoute,
-  path: '/restaurant/$slug',
+  path: '/restaurant/$id',
   component: RestaurantPage,
 })
 
 const bookingRoute = createRoute({
   getParentRoute: () => rootRoute,
-  path: '/restaurant/$slug/book',
+  path: '/restaurant/$id/book',
   component: BookingPage,
 })
 
 const confirmRoute = createRoute({
   getParentRoute: () => rootRoute,
-  path: '/restaurant/$slug/book/confirm',
+  path: '/restaurant/$id/book/confirm',
   component: ConfirmPage,
 })
 

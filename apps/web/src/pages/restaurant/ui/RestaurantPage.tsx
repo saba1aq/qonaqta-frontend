@@ -9,16 +9,14 @@ import { DescriptionSection } from './DescriptionSection'
 import { ScheduleSection } from './ScheduleSection'
 
 export function RestaurantPage() {
-  const { slug } = useParams({ strict: false }) as { slug: string }
+  const { id } = useParams({ strict: false }) as { id: string }
   const navigate = useNavigate()
-  const { data: branch, isLoading } = useBranchDetail(slug)
+  const { data: branch, isLoading } = useBranchDetail(id)
 
   const allPhotos: BranchPhoto[] = branch
     ? branch.photos.length > 0
       ? branch.photos
-      : branch.cover_image_url
-        ? [{ id: 0, image_url: branch.cover_image_url, sort_order: 0 }]
-        : []
+      : []
     : []
 
   const handleShare = async () => {
@@ -116,18 +114,16 @@ export function RestaurantPage() {
         </div>
       </div>
 
-      {branch.booking_enabled && (
-        <div className="fixed bottom-0 left-0 right-0 max-w-120 mx-auto z-30">
-          <div className="bg-white/80 backdrop-blur-xl border-t border-neutral-100 px-5 py-4">
-            <Button
-              className="w-full h-13 rounded-2xl text-[15px] font-semibold bg-neutral-900 text-white hover:bg-neutral-800 active:scale-[0.98] transition-all shadow-lg shadow-neutral-900/20"
-              onClick={() => navigate({ to: '/restaurant/$slug/book', params: { slug } })}
-            >
-              Забронировать столик
-            </Button>
-          </div>
+      <div className="fixed bottom-0 left-0 right-0 max-w-120 mx-auto z-30">
+        <div className="bg-white/80 backdrop-blur-xl border-t border-neutral-100 px-5 py-4">
+          <Button
+            className="w-full h-13 rounded-2xl text-[15px] font-semibold bg-neutral-900 text-white hover:bg-neutral-800 active:scale-[0.98] transition-all shadow-lg shadow-neutral-900/20"
+            onClick={() => navigate({ to: '/restaurant/$id/book', params: { id } })}
+          >
+            Забронировать столик
+          </Button>
         </div>
-      )}
+      </div>
     </div>
   )
 }

@@ -6,7 +6,7 @@ export function useMyBookings() {
   return useQuery<Booking[]>({
     queryKey: ['my-bookings'],
     queryFn: async () => {
-      const { data } = await apiClient.get<Booking[]>('/bookings/me')
+      const { data } = await apiClient.get<Booking[]>('/api/v1/bookings/me')
       return data
     },
   })
@@ -16,7 +16,7 @@ export function useCreateBooking() {
   const queryClient = useQueryClient()
   return useMutation<Booking, Error, CreateBookingRequest>({
     mutationFn: async (payload) => {
-      const { data } = await apiClient.post<Booking>('/bookings', payload)
+      const { data } = await apiClient.post<Booking>('/api/v1/bookings', payload)
       return data
     },
     onSuccess: () => {

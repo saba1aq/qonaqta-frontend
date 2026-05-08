@@ -11,9 +11,9 @@ import { BookingSuccess } from './BookingSuccess'
 import { BookingSummary } from './BookingSummary'
 
 export function ConfirmPage() {
-  const { slug } = useParams({ strict: false }) as { slug: string }
+  const { id } = useParams({ strict: false }) as { id: string }
   const navigate = useNavigate()
-  const { data: branch } = useBranchDetail(slug)
+  const { data: branch } = useBranchDetail(id)
   const createBooking = useCreateBooking()
   const user = useAuthStore((s) => s.user)
 
@@ -81,8 +81,8 @@ export function ConfirmPage() {
     <div className="pb-24">
       <div className="flex items-center gap-3 px-4 py-3 border-b">
         <Link
-          to="/restaurant/$slug/book"
-          params={{ slug }}
+          to="/restaurant/$id/book"
+          params={{ id }}
           className="w-9 h-9 rounded-full flex items-center justify-center"
         >
           <ArrowLeft className="w-5 h-5" />
@@ -97,7 +97,7 @@ export function ConfirmPage() {
             formattedDate={formattedDate}
             timeSlot={timeSlot}
             guestCount={guestCount}
-            slug={slug}
+            id={id}
           />
         )}
 

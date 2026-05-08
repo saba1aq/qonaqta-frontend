@@ -16,7 +16,7 @@ interface SidebarProps {
 }
 
 const navItems = [
-  { path: "/brands", label: "Бренды", icon: Store, exact: false },
+  { path: "/restaurants", label: "Рестораны", icon: Store, exact: false },
   { path: "/cuisines", label: "Кухни", icon: UtensilsCrossed, exact: false },
   { path: "/bookings", label: "Брони", icon: CalendarCheck, exact: false },
 ]

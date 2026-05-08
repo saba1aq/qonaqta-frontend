@@ -39,11 +39,11 @@ export function LoginPage() {
     try {
       const digits = phone.replace(/\D/g, "")
       const normalizedPhone = digits.startsWith("7") ? `+${digits}` : phone
-      const { data } = await apiClient.post("/auth/login", {
+      const { data } = await apiClient.post("/api/v1/auth/login", {
         phone: normalizedPhone,
         password,
       })
-      if (!data.user.is_superadmin) {
+      if (data.user.role !== "superadmin") {
         toast.error("Доступ только для суперадминистраторов")
         setIsLoading(false)
         return

@@ -15,9 +15,12 @@ export function BookingSuccess({
   return (
     <div className="flex flex-col items-center justify-center min-h-screen px-6 text-center">
       <CheckCircle2 className="w-16 h-16 text-green-500 mb-4" />
-      <h2 className="text-xl font-bold mb-2">Бронь подтверждена!</h2>
-      <p className="text-sm text-muted-foreground mb-6">
+      <h2 className="text-xl font-bold mb-2">Заявка принята!</h2>
+      <p className="text-sm text-muted-foreground mb-1">
         {branchName} — {formattedDate}, {timeSlot}
+      </p>
+      <p className="text-sm text-muted-foreground mb-6">
+        Менеджер свяжется с вами для подтверждения
       </p>
       <Button
         className="w-full h-12 rounded-xl text-sm font-semibold"

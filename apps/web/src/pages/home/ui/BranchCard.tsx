@@ -4,13 +4,13 @@ import type { BranchList } from '@/entities/restaurant'
 export function BranchCard({ branch }: { branch: BranchList }) {
   return (
     <Link
-      to="/restaurant/$slug"
-      params={{ slug: branch.slug }}
+      to="/restaurant/$id"
+      params={{ id: String(branch.id) }}
       className="relative rounded-2xl overflow-hidden h-[200px] bg-muted block"
     >
-      {branch.cover_image_url ? (
+      {branch.photos.length > 0 ? (
         <img
-          src={branch.cover_image_url}
+          src={branch.photos[0].image_url}
           alt={branch.name}
           className="w-full h-full object-cover"
         />

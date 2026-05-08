@@ -20,10 +20,7 @@ export interface BranchPhoto {
 export interface BranchList {
   id: number
   name: string
-  slug: string
   address: string
-  cover_image_url: string | null
-  booking_enabled: boolean
   cuisines: Cuisine[]
   photos: BranchPhoto[]
 }
@@ -41,8 +38,10 @@ export interface BranchDetail extends BranchList {
   instagram: string | null
   telegram: string | null
   tiktok: string | null
+  whatsapp: string | null
+  website: string | null
+  two_gis: string | null
   is_active: boolean
   schedules: BranchSchedule[]
-  restaurant: { id: number; name: string; slug: string }
   city: { id: number; name: string; slug: string }
 }

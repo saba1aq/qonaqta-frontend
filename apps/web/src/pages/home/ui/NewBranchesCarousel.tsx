@@ -11,14 +11,14 @@ export function NewBranchesCarousel({ branches }: { branches: BranchList[] }) {
         {branches.map((branch) => (
           <Link
             key={branch.id}
-            to="/restaurant/$slug"
-            params={{ slug: branch.slug }}
+            to="/restaurant/$id"
+            params={{ id: String(branch.id) }}
             className="flex-shrink-0 w-[160px]"
           >
             <div className="relative rounded-xl overflow-hidden h-[120px] bg-muted mb-2">
-              {branch.cover_image_url ? (
+              {branch.photos.length > 0 ? (
                 <img
-                  src={branch.cover_image_url}
+                  src={branch.photos[0].image_url}
                   alt={branch.name}
                   className="w-full h-full object-cover"
                 />

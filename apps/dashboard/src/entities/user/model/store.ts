@@ -5,7 +5,7 @@ export interface HubUser {
   phone: string
   first_name: string | null
   last_name: string | null
-  is_superadmin: boolean
+  role: string
   is_active: boolean
   created_at: string
 }

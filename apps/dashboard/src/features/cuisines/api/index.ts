@@ -9,7 +9,7 @@ export function useCuisines() {
   return useQuery<Cuisine[]>({
     queryKey: QUERY_KEY,
     queryFn: async () => {
-      const { data } = await apiClient.get("/cuisines")
+      const { data } = await apiClient.get("/api/v1/admin/cuisines")
       return data
     },
   })
@@ -20,7 +20,7 @@ export function useCreateCuisine(onSuccess: () => void) {
 
   return useMutation({
     mutationFn: async (body: { name: string; slug: string }) => {
-      const { data } = await apiClient.post("/cuisines", body)
+      const { data } = await apiClient.post("/api/v1/admin/cuisines", body)
       return data as Cuisine
     },
     onSuccess: () => {
@@ -44,7 +44,7 @@ export function useUpdateCuisine(onSuccess: () => void) {
 
   return useMutation({
     mutationFn: async ({ id, payload }: { id: number; payload: UpdateCuisinePayload }) => {
-      const { data } = await apiClient.patch(`/cuisines/${id}`, payload)
+      const { data } = await apiClient.patch(`/api/v1/admin/cuisines/${id}`, payload)
       return data as Cuisine
     },
     onSuccess: () => {
@@ -70,7 +70,7 @@ export function useToggleCuisineActive() {
 
   return useMutation({
     mutationFn: async ({ id, is_active }: { id: number; is_active: boolean }) => {
-      const { data } = await apiClient.patch(`/cuisines/${id}`, { is_active })
+      const { data } = await apiClient.patch(`/api/v1/admin/cuisines/${id}`, { is_active })
       return data as Cuisine
     },
     onSuccess: () => {
@@ -86,7 +86,7 @@ export function useDeleteCuisine() {
   const queryClient = useQueryClient()
 
   return useMutation({
-    mutationFn: (id: number) => apiClient.delete(`/cuisines/${id}`),
+    mutationFn: (id: number) => apiClient.delete(`/api/v1/admin/cuisines/${id}`),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: QUERY_KEY })
       toast.success("Кухня удалена")

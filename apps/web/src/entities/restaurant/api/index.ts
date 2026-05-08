@@ -6,7 +6,7 @@ export function useCities() {
   return useQuery<City[]>({
     queryKey: ['cities'],
     queryFn: async () => {
-      const { data } = await apiClient.get<City[]>('/cities')
+      const { data } = await apiClient.get<City[]>('/api/v1/cities')
       return data
     },
   })
@@ -16,7 +16,7 @@ export function useCuisines() {
   return useQuery<Cuisine[]>({
     queryKey: ['cuisines'],
     queryFn: async () => {
-      const { data } = await apiClient.get<Cuisine[]>('/cuisines', { params: { is_active: true } })
+      const { data } = await apiClient.get<Cuisine[]>('/api/v1/cuisines', { params: { is_active: true } })
       return data
     },
   })
@@ -30,19 +30,19 @@ export function useBranches(cityId?: number, query?: string, cuisineIds?: number
       if (cityId) params.set('city_id', String(cityId))
       if (query) params.set('q', query)
       if (cuisineIds?.length) cuisineIds.forEach(id => params.append('cuisine_id', String(id)))
-      const { data } = await apiClient.get<BranchList[]>(`/restaurants?${params.toString()}`)
+      const { data } = await apiClient.get<BranchList[]>(`/api/v1/restaurants?${params.toString()}`)
       return data
     },
   })
 }
 
-export function useBranchDetail(slug: string) {
+export function useBranchDetail(id: string) {
   return useQuery<BranchDetail>({
-    queryKey: ['branch', slug],
+    queryKey: ['branch', id],
     queryFn: async () => {
-      const { data } = await apiClient.get<BranchDetail>(`/restaurants/${slug}`)
+      const { data } = await apiClient.get<BranchDetail>(`/api/v1/restaurants/${id}`)
       return data
     },
-    enabled: !!slug,
+    enabled: !!id,
   })
 }

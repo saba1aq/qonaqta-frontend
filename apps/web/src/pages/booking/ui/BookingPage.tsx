@@ -10,9 +10,9 @@ import { CalendarGrid } from './CalendarGrid'
 import { TimeSlotPicker } from './TimeSlotPicker'
 
 export function BookingPage() {
-  const { slug } = useParams({ strict: false }) as { slug: string }
+  const { id } = useParams({ strict: false }) as { id: string }
   const navigate = useNavigate()
-  const { data: branch } = useBranchDetail(slug)
+  const { data: branch } = useBranchDetail(id)
 
   const { guestCount, date, timeSlot, setGuestCount, setDate, setTimeSlot } =
     useBookingFormStore()
@@ -37,8 +37,8 @@ export function BookingPage() {
     <div className="pb-24">
       <div className="flex items-center gap-3 px-4 py-3 border-b">
         <Link
-          to="/restaurant/$slug"
-          params={{ slug }}
+          to="/restaurant/$id"
+          params={{ id }}
           className="w-9 h-9 rounded-full flex items-center justify-center"
         >
           <ArrowLeft className="w-5 h-5" />
@@ -69,7 +69,7 @@ export function BookingPage() {
           <Button
             className="w-full h-13 rounded-2xl text-[15px] font-semibold bg-neutral-900 text-white hover:bg-neutral-800 active:scale-[0.98] transition-all shadow-lg shadow-neutral-900/20"
             disabled={!canProceed}
-            onClick={() => navigate({ to: '/restaurant/$slug/book/confirm', params: { slug } })}
+            onClick={() => navigate({ to: '/restaurant/$id/book/confirm', params: { id } })}
           >
             Продолжить
           </Button>

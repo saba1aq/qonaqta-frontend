@@ -7,20 +7,20 @@ export function BookingSummary({
   formattedDate,
   timeSlot,
   guestCount,
-  slug,
+  id,
 }: {
   branch: BranchDetail
   formattedDate: string
   timeSlot: string | null
   guestCount: number
-  slug: string
+  id: string
 }) {
   return (
     <>
       <div className="flex gap-3 items-center p-3 bg-secondary rounded-xl">
-        {branch.cover_image_url ? (
+        {branch.photos.length > 0 ? (
           <img
-            src={branch.cover_image_url}
+            src={branch.photos[0].image_url}
             alt={branch.name}
             className="w-14 h-14 rounded-lg object-cover"
           />
@@ -45,8 +45,8 @@ export function BookingSummary({
             </span>
           </div>
           <Link
-            to="/restaurant/$slug/book"
-            params={{ slug }}
+            to="/restaurant/$id/book"
+            params={{ id }}
             className="text-xs text-primary underline"
           >
             Изменить
