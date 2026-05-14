@@ -92,7 +92,7 @@ export function RestaurantPage() {
               {branch.cuisines.map((c) => (
                 <span
                   key={c.id}
-                  className="px-3.5 py-1.5 rounded-full text-xs font-medium bg-neutral-100 text-neutral-700"
+                  className="px-4 py-2.5 rounded-full text-[13px] font-medium bg-neutral-100 text-neutral-700"
                 >
                   {c.name}
                 </span>
