@@ -46,3 +46,17 @@ export function useBranchDetail(id: string) {
     enabled: !!id,
   })
 }
+
+export function useBranchSlots(branchId: string | undefined, date: string | null) {
+  return useQuery<string[]>({
+    queryKey: ['branch-slots', branchId, date],
+    queryFn: async () => {
+      const { data } = await apiClient.get<{ slots: string[] }>(
+        `/api/v1/restaurants/${branchId}/slots`,
+        { params: { date } },
+      )
+      return data.slots
+    },
+    enabled: !!branchId && !!date,
+  })
+}

@@ -1,10 +1,8 @@
-import { useMemo } from 'react'
 import { useParams, useNavigate, Link } from '@tanstack/react-router'
 import { ArrowLeft } from 'lucide-react'
-import { useBranchDetail } from '@/entities/restaurant'
+import { useBranchDetail, useBranchSlots } from '@/entities/restaurant'
 import { useBookingFormStore } from '@/features/book-table'
 import { Button } from '@qonaqta/ui/components/button'
-import { generateTimeSlots } from '../lib/time-slots'
 import { GuestCountSelector } from './GuestCountSelector'
 import { CalendarGrid } from './CalendarGrid'
 import { TimeSlotPicker } from './TimeSlotPicker'
@@ -17,19 +15,7 @@ export function BookingPage() {
   const { guestCount, date, timeSlot, setGuestCount, setDate, setTimeSlot } =
     useBookingFormStore()
 
-  const selectedDayOfWeek = date ? (() => {
-    const d = new Date(date)
-    return d.getDay() === 0 ? 7 : d.getDay()
-  })() : null
-
-  const todaySchedule = selectedDayOfWeek !== null
-    ? branch?.schedules.find((s) => s.day_of_week === selectedDayOfWeek)
-    : null
-
-  const timeSlots = useMemo(() => {
-    if (!todaySchedule || todaySchedule.is_closed) return []
-    return generateTimeSlots(todaySchedule.open_time, todaySchedule.close_time)
-  }, [todaySchedule])
+  const { data: timeSlots = [] } = useBranchSlots(id, date)
 
   const canProceed = date && timeSlot
 

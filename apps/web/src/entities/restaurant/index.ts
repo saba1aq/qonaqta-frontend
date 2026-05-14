@@ -12,4 +12,5 @@ export {
   useCuisines,
   useBranches,
   useBranchDetail,
+  useBranchSlots,
 } from './api'
