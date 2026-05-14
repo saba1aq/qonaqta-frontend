@@ -15,6 +15,8 @@ import {
 } from "@/features/restaurants"
 import { useCuisines } from "@/features/cuisines"
 import type { RestaurantDetail, Schedule } from "@/features/restaurants"
+import { PhoneInput } from "@/shared/ui/phone-input"
+import { normalizePhone } from "@/shared/lib/format-phone"
 
 const DAY_NAMES = ["Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота", "Воскресенье"]
 
@@ -43,12 +45,12 @@ function BasicInfoSection({ restaurant, cities }: { restaurant: RestaurantDetail
         name: form.name,
         city_id: form.city_id,
         address: form.address || undefined,
-        phone: form.phone || undefined,
+        phone: form.phone ? normalizePhone(form.phone) : undefined,
         description: form.description || undefined,
         instagram: form.instagram || undefined,
         telegram: form.telegram || undefined,
         tiktok: form.tiktok || undefined,
-        whatsapp: form.whatsapp || undefined,
+        whatsapp: form.whatsapp ? normalizePhone(form.whatsapp) : undefined,
         website: form.website || undefined,
         two_gis: form.two_gis || undefined,
         is_active: form.is_active,
@@ -86,7 +88,7 @@ function BasicInfoSection({ restaurant, cities }: { restaurant: RestaurantDetail
         </div>
         <div className="space-y-1.5">
           <Label className="text-[13px] text-neutral-600">Телефон</Label>
-          <Input value={form.phone} onChange={(e) => update("phone", e.target.value)} className="h-10 rounded-xl text-[14px]" placeholder="+7 (700) 000-00-00" />
+          <PhoneInput value={form.phone} onChange={(v) => update("phone", v)} className="h-10 rounded-xl text-[14px]" />
         </div>
         <div className="space-y-1.5">
           <Label className="text-[13px] text-neutral-600">Сайт</Label>
@@ -115,7 +117,7 @@ function BasicInfoSection({ restaurant, cities }: { restaurant: RestaurantDetail
         </div>
         <div className="space-y-1.5">
           <Label className="text-[13px] text-neutral-600">WhatsApp</Label>
-          <Input value={form.whatsapp} onChange={(e) => update("whatsapp", e.target.value)} className="h-10 rounded-xl text-[14px]" placeholder="+7 700 000 0000" />
+          <PhoneInput value={form.whatsapp} onChange={(v) => update("whatsapp", v)} className="h-10 rounded-xl text-[14px]" />
         </div>
         <div className="space-y-1.5 sm:col-span-2">
           <Label className="text-[13px] text-neutral-600">2GIS</Label>

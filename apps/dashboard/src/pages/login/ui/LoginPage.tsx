@@ -7,6 +7,7 @@ import { Label } from "@qonaqta/ui/components/label"
 import { Phone, Lock, Eye, EyeOff, ArrowRight } from "lucide-react"
 import { apiClient } from "@/shared/api"
 import { useAuthStore } from "@/entities/user"
+import { formatPhone, normalizePhone } from "@/shared/lib/format-phone"
 
 export function LoginPage() {
   const [phone, setPhone] = useState("")
@@ -17,18 +18,6 @@ export function LoginPage() {
   const navigate = useNavigate()
   const login = useAuthStore((s) => s.login)
 
-  const formatPhone = (value: string) => {
-    const digits = value.replace(/\D/g, "")
-    if (digits.length === 0) return ""
-    if (digits.length <= 1) return `+${digits}`
-    if (digits.length <= 4) return `+${digits.slice(0, 1)} (${digits.slice(1)}`
-    if (digits.length <= 7)
-      return `+${digits.slice(0, 1)} (${digits.slice(1, 4)}) ${digits.slice(4)}`
-    if (digits.length <= 9)
-      return `+${digits.slice(0, 1)} (${digits.slice(1, 4)}) ${digits.slice(4, 7)}-${digits.slice(7)}`
-    return `+${digits.slice(0, 1)} (${digits.slice(1, 4)}) ${digits.slice(4, 7)}-${digits.slice(7, 9)}-${digits.slice(9, 11)}`
-  }
-
   const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPhone(formatPhone(e.target.value))
   }
@@ -37,10 +26,8 @@ export function LoginPage() {
     e.preventDefault()
     setIsLoading(true)
     try {
-      const digits = phone.replace(/\D/g, "")
-      const normalizedPhone = digits.startsWith("7") ? `+${digits}` : phone
       const { data } = await apiClient.post("/api/v1/auth/login", {
-        phone: normalizedPhone,
+        phone: normalizePhone(phone),
         password,
       })
       if (data.user.role !== "superadmin") {

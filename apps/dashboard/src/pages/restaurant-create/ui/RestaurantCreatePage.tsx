@@ -7,6 +7,8 @@ import { Label } from "@qonaqta/ui/components/label"
 import { useCreateRestaurant, useCities } from "@/features/restaurants"
 import { useCuisines } from "@/features/cuisines"
 import { cn } from "@qonaqta/ui/lib/utils"
+import { PhoneInput } from "@/shared/ui/phone-input"
+import { normalizePhone } from "@/shared/lib/format-phone"
 
 export function RestaurantCreatePage() {
   const navigate = useNavigate()
@@ -48,7 +50,7 @@ export function RestaurantCreatePage() {
       name: form.name,
       city_id: form.city_id,
       address: form.address || undefined,
-      phone: form.phone || undefined,
+      phone: form.phone ? normalizePhone(form.phone) : undefined,
       description: form.description || undefined,
       cuisine_ids: selectedCuisineIds.length > 0 ? selectedCuisineIds : undefined,
     })
@@ -103,7 +105,7 @@ export function RestaurantCreatePage() {
             </div>
             <div className="space-y-1.5">
               <Label className="text-[13px] text-neutral-600">Телефон</Label>
-              <Input value={form.phone} onChange={(e) => update("phone", e.target.value)} className="h-10 rounded-xl text-[14px]" placeholder="+7 (700) 000-00-00" />
+              <PhoneInput value={form.phone} onChange={(v) => update("phone", v)} className="h-10 rounded-xl text-[14px]" />
             </div>
             <div className="space-y-1.5">
               <Label className="text-[13px] text-neutral-600">Сайт</Label>
@@ -132,7 +134,7 @@ export function RestaurantCreatePage() {
             </div>
             <div className="space-y-1.5">
               <Label className="text-[13px] text-neutral-600">WhatsApp</Label>
-              <Input value={form.whatsapp} onChange={(e) => update("whatsapp", e.target.value)} className="h-10 rounded-xl text-[14px]" placeholder="+7 700 000 0000" />
+              <PhoneInput value={form.whatsapp} onChange={(v) => update("whatsapp", v)} className="h-10 rounded-xl text-[14px]" />
             </div>
             <div className="space-y-1.5 sm:col-span-2">
               <Label className="text-[13px] text-neutral-600">2GIS</Label>
