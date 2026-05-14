@@ -78,7 +78,7 @@ export function RestaurantPage() {
 
       <div className="flex-1 bg-white">
         <div className="px-5 pt-5 pb-3">
-          <div className="flex items-end justify-between gap-3">
+          <div className="flex items-start justify-between gap-3">
             <div className="min-w-0">
               <h1 className="text-[26px] font-bold text-neutral-900 leading-tight tracking-tight">
                 {branch.name}

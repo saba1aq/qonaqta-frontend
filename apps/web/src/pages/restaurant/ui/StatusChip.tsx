@@ -17,7 +17,7 @@ function nextOpenSubLabel(days: number | null, openAt: string | null): string {
 export function StatusChip({ status }: { status: BranchStatus }) {
   if (status.state === 'open') {
     return (
-      <div className="flex flex-col items-end pb-0.5 shrink-0">
+      <div className="flex flex-col items-end pt-1 shrink-0">
         <div className="flex items-center gap-1">
           <span className="size-1.5 rounded-full bg-neutral-900 animate-pulse" />
           <span className="text-[12px] font-semibold text-neutral-900">Открыто</span>
@@ -31,7 +31,7 @@ export function StatusChip({ status }: { status: BranchStatus }) {
 
   if (status.state === 'closing_soon') {
     return (
-      <div className="flex flex-col items-end pb-0.5 shrink-0">
+      <div className="flex flex-col items-end pt-1 shrink-0">
         <div className="flex items-center gap-1">
           <span className="size-1.5 rounded-full bg-neutral-900 animate-pulse" />
           <span className="text-[12px] font-semibold text-neutral-900">
@@ -44,7 +44,7 @@ export function StatusChip({ status }: { status: BranchStatus }) {
   }
 
   return (
-    <div className="flex flex-col items-end pb-0.5 shrink-0">
+    <div className="flex flex-col items-end pt-1 shrink-0">
       <div className="flex items-center gap-1">
         <span className="size-1.5 rounded-full bg-neutral-300" />
         <span className="text-[12px] font-semibold text-neutral-500">Закрыто</span>
