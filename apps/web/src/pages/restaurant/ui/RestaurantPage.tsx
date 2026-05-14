@@ -7,6 +7,7 @@ import { PhotoCarousel } from './PhotoCarousel'
 import { ActionButtons } from './ActionButtons'
 import { DescriptionSection } from './DescriptionSection'
 import { ScheduleSection } from './ScheduleSection'
+import { StatusChip } from './StatusChip'
 
 export function RestaurantPage() {
   const { id } = useParams({ strict: false }) as { id: string }
@@ -84,6 +85,11 @@ export function RestaurantPage() {
             <MapPin className="size-3.5 flex-shrink-0" />
             <span className="truncate">{branch.address}</span>
           </div>
+          {branch.status && (
+            <div className="mt-3">
+              <StatusChip status={branch.status} />
+            </div>
+          )}
         </div>
 
         <div className="px-5 pb-36 space-y-6">

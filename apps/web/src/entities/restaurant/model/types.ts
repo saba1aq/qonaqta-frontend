@@ -32,6 +32,14 @@ export interface BranchSchedule {
   is_closed: boolean
 }
 
+export interface BranchStatus {
+  state: 'open' | 'closing_soon' | 'closed'
+  closes_in_minutes: number | null
+  open_until: string | null
+  opens_at: string | null
+  opens_in_days: number | null
+}
+
 export interface BranchDetail extends BranchList {
   phone: string | null
   description: string | null
@@ -44,4 +52,5 @@ export interface BranchDetail extends BranchList {
   is_active: boolean
   schedules: BranchSchedule[]
   city: { id: number; name: string; slug: string }
+  status: BranchStatus | null
 }
