@@ -56,10 +56,8 @@ export function RestaurantPage() {
 
   return (
     <div className="flex flex-col min-h-screen bg-white">
-      <div className="relative h-[320px] flex-shrink-0 overflow-hidden">
+      <div className="relative h-[320px] flex-shrink-0 overflow-hidden rounded-b-3xl">
         <PhotoCarousel photos={allPhotos} branchName={branch.name} />
-
-        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-black/10 pointer-events-none" />
 
         <div className="absolute top-0 left-0 right-0 flex items-center justify-between p-4 z-10">
           <Link
@@ -75,20 +73,18 @@ export function RestaurantPage() {
             <Share2 className="size-5 text-neutral-900" />
           </button>
         </div>
+      </div>
 
-        <div className="absolute bottom-0 left-0 right-0 p-5 z-10">
-          <h1 className="text-[26px] font-bold text-white leading-tight tracking-tight">
+      <div className="flex-1 bg-white">
+        <div className="px-5 pt-5 pb-3">
+          <h1 className="text-[26px] font-bold text-neutral-900 leading-tight tracking-tight">
             {branch.name}
           </h1>
-          <div className="flex items-center gap-1.5 mt-1.5 text-white/80 text-sm">
+          <div className="flex items-center gap-1.5 mt-1.5 text-neutral-500 text-sm">
             <MapPin className="size-3.5 flex-shrink-0" />
             <span className="truncate">{branch.address}</span>
           </div>
         </div>
-      </div>
-
-      <div className="flex-1 -mt-3 relative z-20 bg-white rounded-t-3xl">
-        <div className="w-10 h-1 rounded-full bg-neutral-200 mx-auto mt-3 mb-4" />
 
         <div className="px-5 pb-36 space-y-6">
           {branch.cuisines.length > 0 && (
