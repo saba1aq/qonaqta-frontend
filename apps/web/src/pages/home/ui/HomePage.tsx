@@ -4,7 +4,6 @@ import { useDebounce } from '@/shared/lib/use-debounce'
 import { CityPicker } from './CityPicker'
 import { SearchBar } from './SearchBar'
 import { CuisineFilter } from './CuisineFilter'
-import { NewBranchesCarousel } from './NewBranchesCarousel'
 import { BranchCard } from './BranchCard'
 
 export function HomePage() {
@@ -28,8 +27,6 @@ export function HomePage() {
   )
 
   const selectedCity = cities?.find((c) => c.id === activeCityId)
-
-  const newBranches = branches?.slice(0, 5) ?? []
 
   const handleCitySelect = (cityId: number) => {
     setSelectedCityId(cityId)
@@ -61,10 +58,6 @@ export function HomePage() {
       </div>
 
       <div className="flex-1 overflow-y-auto px-4 pt-2 pb-8">
-        <NewBranchesCarousel branches={newBranches} />
-
-        <h2 className="text-lg font-semibold mb-3">Все заведения</h2>
-
         {isLoading ? (
           <div className="flex flex-col gap-4">
             {[1, 2, 3].map((i) => (
