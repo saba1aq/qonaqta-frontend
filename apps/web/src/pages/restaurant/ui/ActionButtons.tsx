@@ -1,4 +1,4 @@
-import { Phone, Navigation, ExternalLink } from 'lucide-react'
+import { Phone, Navigation, ExternalLink, MessageCircle } from 'lucide-react'
 import type { BranchDetail } from '@/entities/restaurant'
 
 function InstagramIcon({ className }: { className?: string }) {
@@ -10,6 +10,8 @@ function InstagramIcon({ className }: { className?: string }) {
     </svg>
   )
 }
+
+const WHATSAPP_MESSAGE = 'Здравствуйте! Пишу из приложения Qonaqta.'
 
 export function ActionButtons({ branch }: { branch: BranchDetail }) {
   return (
@@ -32,6 +34,17 @@ export function ActionButtons({ branch }: { branch: BranchDetail }) {
         >
           <Navigation className="size-5 text-neutral-600" />
           <span className="text-[11px] text-neutral-500 font-medium">Маршрут</span>
+        </a>
+      )}
+      {branch.whatsapp && (
+        <a
+          href={`https://api.whatsapp.com/send/?phone=${branch.whatsapp.replace(/\D/g, '')}&text=${encodeURIComponent(WHATSAPP_MESSAGE)}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex-1 flex flex-col items-center gap-1.5 py-3.5 rounded-2xl bg-neutral-50 active:bg-neutral-100 transition-colors"
+        >
+          <MessageCircle className="size-5 text-neutral-600" />
+          <span className="text-[11px] text-neutral-500 font-medium">WhatsApp</span>
         </a>
       )}
       {branch.instagram && (
