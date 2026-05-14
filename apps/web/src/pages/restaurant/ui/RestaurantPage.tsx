@@ -78,18 +78,18 @@ export function RestaurantPage() {
 
       <div className="flex-1 bg-white">
         <div className="px-5 pt-5 pb-3">
-          <h1 className="text-[26px] font-bold text-neutral-900 leading-tight tracking-tight">
-            {branch.name}
-          </h1>
-          <div className="flex items-center gap-1.5 mt-1.5 text-neutral-500 text-sm">
-            <MapPin className="size-3.5 flex-shrink-0" />
-            <span className="truncate">{branch.address}</span>
-          </div>
-          {branch.status && (
-            <div className="mt-3">
-              <StatusChip status={branch.status} />
+          <div className="flex items-end justify-between gap-3">
+            <div className="min-w-0">
+              <h1 className="text-[26px] font-bold text-neutral-900 leading-tight tracking-tight">
+                {branch.name}
+              </h1>
+              <div className="flex items-center gap-1.5 mt-1.5 text-neutral-500 text-sm">
+                <MapPin className="size-3.5 flex-shrink-0" />
+                <span className="truncate">{branch.address}</span>
+              </div>
             </div>
-          )}
+            {branch.status && <StatusChip status={branch.status} />}
+          </div>
         </div>
 
         <div className="px-5 pb-36 space-y-6">
