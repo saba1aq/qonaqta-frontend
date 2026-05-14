@@ -135,17 +135,6 @@ export function ConfirmPage() {
             />
           </div>
 
-          <div>
-            <label className="text-sm font-medium mb-1 block">Комментарий</label>
-            <textarea
-              value={localNotes}
-              onChange={(e) => setLocalNotes(e.target.value)}
-              placeholder="Особые пожелания..."
-              rows={3}
-              className="w-full px-3 py-2 rounded-xl border border-input bg-transparent text-base md:text-sm outline-none resize-none focus:ring-2 focus:ring-primary/20"
-            />
-          </div>
-
           {branch?.whatsapp && (
             <div>
               <label className="text-sm font-semibold mb-2 block">Способ связи</label>
@@ -159,10 +148,10 @@ export function ConfirmPage() {
                   <span
                     className={
                       'size-5 rounded-full border-2 flex items-center justify-center transition-colors ' +
-                      (contactMethod === 'phone' ? 'border-indigo-600' : 'border-neutral-300')
+                      (contactMethod === 'phone' ? 'border-neutral-900' : 'border-neutral-300')
                     }
                   >
-                    {contactMethod === 'phone' && <span className="size-2.5 rounded-full bg-indigo-600" />}
+                    {contactMethod === 'phone' && <span className="size-2.5 rounded-full bg-neutral-900" />}
                   </span>
                 </button>
                 <button
@@ -174,15 +163,26 @@ export function ConfirmPage() {
                   <span
                     className={
                       'size-5 rounded-full border-2 flex items-center justify-center transition-colors ' +
-                      (contactMethod === 'whatsapp' ? 'border-indigo-600' : 'border-neutral-300')
+                      (contactMethod === 'whatsapp' ? 'border-neutral-900' : 'border-neutral-300')
                     }
                   >
-                    {contactMethod === 'whatsapp' && <span className="size-2.5 rounded-full bg-indigo-600" />}
+                    {contactMethod === 'whatsapp' && <span className="size-2.5 rounded-full bg-neutral-900" />}
                   </span>
                 </button>
               </div>
             </div>
           )}
+
+          <div>
+            <label className="text-sm font-medium mb-1 block">Комментарий</label>
+            <textarea
+              value={localNotes}
+              onChange={(e) => setLocalNotes(e.target.value)}
+              placeholder="Особые пожелания..."
+              rows={3}
+              className="w-full px-3 py-2 rounded-xl border border-input bg-transparent text-base md:text-sm outline-none resize-none focus:ring-2 focus:ring-primary/20"
+            />
+          </div>
         </div>
 
         {createBooking.error && (
