@@ -40,7 +40,7 @@ export function HomePage() {
   const [showCityPicker, setShowCityPicker] = useState(false)
 
   return (
-    <div className="flex flex-col h-screen">
+    <div className="flex flex-col h-svh">
       <div className="flex-shrink-0 px-4 pt-4 pb-2 bg-white">
         <CityPicker
           cities={cities}
