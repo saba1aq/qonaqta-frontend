@@ -38,7 +38,7 @@ export function CalendarGrid({
   const headerLabel = `${MONTH_NAMES[gridStart.getMonth()]} ${gridStart.getFullYear()}`
 
   return (
-    <div>
+    <div className="rounded-2xl border border-neutral-200 bg-white p-4">
       <h3 className="text-sm font-semibold text-center mb-3">{headerLabel}</h3>
 
       <div className="grid grid-cols-7 gap-1 mb-1">

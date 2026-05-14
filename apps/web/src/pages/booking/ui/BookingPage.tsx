@@ -49,11 +49,14 @@ export function BookingPage() {
       <div className="p-4 space-y-6">
         <GuestCountSelector count={guestCount} onChange={setGuestCount} />
 
-        <CalendarGrid
-          date={date}
-          onSelect={setDate}
-          schedules={branch?.schedules}
-        />
+        <div>
+          <h3 className="text-sm font-semibold mb-3">Дата</h3>
+          <CalendarGrid
+            date={date}
+            onSelect={setDate}
+            schedules={branch?.schedules}
+          />
+        </div>
 
         {date && (
           <TimeSlotPicker

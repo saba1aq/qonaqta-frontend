@@ -23,15 +23,17 @@ export function ActionButtons({ branch }: { branch: BranchDetail }) {
           <span className="text-[11px] text-neutral-500 font-medium">Позвонить</span>
         </a>
       )}
-      <a
-        href={branch.two_gis ?? undefined}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="flex-1 flex flex-col items-center gap-1.5 py-3.5 rounded-2xl bg-neutral-50 active:bg-neutral-100 transition-colors"
-      >
-        <Navigation className="size-5 text-neutral-600" />
-        <span className="text-[11px] text-neutral-500 font-medium">Маршрут</span>
-      </a>
+      {branch.two_gis && (
+        <a
+          href={branch.two_gis}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex-1 flex flex-col items-center gap-1.5 py-3.5 rounded-2xl bg-neutral-50 active:bg-neutral-100 transition-colors"
+        >
+          <Navigation className="size-5 text-neutral-600" />
+          <span className="text-[11px] text-neutral-500 font-medium">Маршрут</span>
+        </a>
+      )}
       {branch.instagram && (
         <a
           href={`https://instagram.com/${branch.instagram.replace('@', '')}`}

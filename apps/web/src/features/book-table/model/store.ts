@@ -1,5 +1,7 @@
 import { create } from 'zustand'
 
+export type ContactMethod = 'phone' | 'whatsapp'
+
 interface BookingFormState {
   guestCount: number
   date: string | null
@@ -7,11 +9,13 @@ interface BookingFormState {
   guestName: string
   guestPhone: string
   notes: string
+  contactMethod: ContactMethod
   setGuestCount: (count: number) => void
   setDate: (date: string) => void
   setTimeSlot: (slot: string) => void
   setGuestInfo: (name: string, phone: string) => void
   setNotes: (notes: string) => void
+  setContactMethod: (method: ContactMethod) => void
   reset: () => void
 }
 
@@ -30,6 +34,7 @@ const initialState = {
   guestName: '',
   guestPhone: '',
   notes: '',
+  contactMethod: 'phone' as ContactMethod,
 }
 
 export const useBookingFormStore = create<BookingFormState>((set) => ({
@@ -40,5 +45,6 @@ export const useBookingFormStore = create<BookingFormState>((set) => ({
   setTimeSlot: (slot: string) => set({ timeSlot: slot }),
   setGuestInfo: (name: string, phone: string) => set({ guestName: name, guestPhone: phone }),
   setNotes: (notes: string) => set({ notes }),
+  setContactMethod: (method: ContactMethod) => set({ contactMethod: method }),
   reset: () => set(initialState),
 }))

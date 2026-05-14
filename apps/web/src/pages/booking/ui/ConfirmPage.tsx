@@ -24,8 +24,10 @@ export function ConfirmPage() {
     guestName,
     guestPhone,
     notes,
+    contactMethod,
     setGuestInfo,
     setNotes,
+    setContactMethod,
     reset,
   } = useBookingFormStore()
 
@@ -55,6 +57,7 @@ export function ConfirmPage() {
       guest_count: guestCount,
       guest_name: localName,
       guest_phone: localPhone,
+      contact_method: branch.whatsapp ? contactMethod : 'phone',
       notes: localNotes || undefined,
     })
 
@@ -142,6 +145,44 @@ export function ConfirmPage() {
               className="w-full px-3 py-2 rounded-xl border border-input bg-transparent text-base md:text-sm outline-none resize-none focus:ring-2 focus:ring-primary/20"
             />
           </div>
+
+          {branch?.whatsapp && (
+            <div>
+              <label className="text-sm font-semibold mb-2 block">Способ связи</label>
+              <div className="rounded-2xl border border-neutral-200 bg-white divide-y divide-neutral-100">
+                <button
+                  type="button"
+                  onClick={() => setContactMethod('phone')}
+                  className="w-full flex items-center justify-between px-4 py-3.5 text-left"
+                >
+                  <span className="text-[14px] text-neutral-900">Позвонить мне</span>
+                  <span
+                    className={
+                      'size-5 rounded-full border-2 flex items-center justify-center transition-colors ' +
+                      (contactMethod === 'phone' ? 'border-indigo-600' : 'border-neutral-300')
+                    }
+                  >
+                    {contactMethod === 'phone' && <span className="size-2.5 rounded-full bg-indigo-600" />}
+                  </span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setContactMethod('whatsapp')}
+                  className="w-full flex items-center justify-between px-4 py-3.5 text-left"
+                >
+                  <span className="text-[14px] text-neutral-900">Написать в WhatsApp</span>
+                  <span
+                    className={
+                      'size-5 rounded-full border-2 flex items-center justify-center transition-colors ' +
+                      (contactMethod === 'whatsapp' ? 'border-indigo-600' : 'border-neutral-300')
+                    }
+                  >
+                    {contactMethod === 'whatsapp' && <span className="size-2.5 rounded-full bg-indigo-600" />}
+                  </span>
+                </button>
+              </div>
+            </div>
+          )}
         </div>
 
         {createBooking.error && (

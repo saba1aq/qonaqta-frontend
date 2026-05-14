@@ -265,9 +265,10 @@ function PhotosSection({ restaurant }: { restaurant: RestaurantDetail }) {
 function ScheduleSection({ restaurant }: { restaurant: RestaurantDetail }) {
   const [rows, setRows] = useState<Omit<Schedule, "id" | "branch_id">[]>(() =>
     DAY_NAMES.map((_, i) => {
-      const existing = restaurant.schedules.find((s) => s.day_of_week === i)
+      const dow = i + 1
+      const existing = restaurant.schedules.find((s) => s.day_of_week === dow)
       return {
-        day_of_week: i,
+        day_of_week: dow,
         open_time: existing?.open_time ?? "09:00",
         close_time: existing?.close_time ?? "22:00",
         is_closed: existing?.is_closed ?? false,
