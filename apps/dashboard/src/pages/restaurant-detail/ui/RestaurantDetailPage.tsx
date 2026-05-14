@@ -269,8 +269,8 @@ function ScheduleSection({ restaurant }: { restaurant: RestaurantDetail }) {
       const existing = restaurant.schedules.find((s) => s.day_of_week === dow)
       return {
         day_of_week: dow,
-        open_time: existing?.open_time ?? "09:00",
-        close_time: existing?.close_time ?? "22:00",
+        open_time: existing?.open_time.slice(0, 5) ?? "09:00",
+        close_time: existing?.close_time.slice(0, 5) ?? "22:00",
         is_closed: existing?.is_closed ?? false,
       }
     })
