@@ -139,7 +139,7 @@ export function ConfirmPage() {
               onChange={(e) => setLocalNotes(e.target.value)}
               placeholder="Особые пожелания..."
               rows={3}
-              className="w-full px-3 py-2 rounded-xl border border-input bg-transparent text-sm outline-none resize-none focus:ring-2 focus:ring-primary/20"
+              className="w-full px-3 py-2 rounded-xl border border-input bg-transparent text-base md:text-sm outline-none resize-none focus:ring-2 focus:ring-primary/20"
             />
           </div>
         </div>
