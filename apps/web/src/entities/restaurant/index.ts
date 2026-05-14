@@ -5,6 +5,7 @@ export type {
   BranchDetail,
   BranchSchedule,
   BranchPhoto,
+  BranchStatus,
 } from './model/types'
 
 export {
