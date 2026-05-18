@@ -53,9 +53,7 @@ export function LocationCard({
 
   return (
     <div>
-      <p className="text-[11px] uppercase tracking-wider text-neutral-400 font-semibold mb-3">
-        Как добраться
-      </p>
+      <h3 className="text-[15px] font-semibold text-neutral-900 mb-3">Как добраться</h3>
       <a
         href={twoGis ?? '#'}
         target="_blank"

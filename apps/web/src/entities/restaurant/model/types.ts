@@ -55,4 +55,5 @@ export interface BranchDetail extends BranchList {
   schedules: BranchSchedule[]
   city: { id: number; name: string; slug: string }
   status: BranchStatus | null
+  today_dow: number | null
 }

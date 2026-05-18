@@ -114,7 +114,7 @@ export function RestaurantPage() {
             <DescriptionSection description={branch.description} />
           )}
 
-          <ScheduleSection schedules={branch.schedules} />
+          <ScheduleSection schedules={branch.schedules} todayDow={branch.today_dow} />
 
           <LocationCard
             address={branch.address}
