@@ -1,4 +1,5 @@
 import { create } from 'zustand'
+import { persist, createJSONStorage } from 'zustand/middleware'
 
 export type ContactMethod = 'phone' | 'whatsapp'
 
@@ -37,14 +38,22 @@ const initialState = {
   contactMethod: 'phone' as ContactMethod,
 }
 
-export const useBookingFormStore = create<BookingFormState>((set) => ({
-  ...initialState,
+export const useBookingFormStore = create<BookingFormState>()(
+  persist(
+    (set) => ({
+      ...initialState,
 
-  setGuestCount: (count: number) => set({ guestCount: Math.max(1, Math.min(20, count)) }),
-  setDate: (date: string) => set({ date, timeSlot: null }),
-  setTimeSlot: (slot: string) => set({ timeSlot: slot }),
-  setGuestInfo: (name: string, phone: string) => set({ guestName: name, guestPhone: phone }),
-  setNotes: (notes: string) => set({ notes }),
-  setContactMethod: (method: ContactMethod) => set({ contactMethod: method }),
-  reset: () => set(initialState),
-}))
+      setGuestCount: (count: number) => set({ guestCount: Math.max(1, Math.min(20, count)) }),
+      setDate: (date: string) => set({ date, timeSlot: null }),
+      setTimeSlot: (slot: string) => set({ timeSlot: slot }),
+      setGuestInfo: (name: string, phone: string) => set({ guestName: name, guestPhone: phone }),
+      setNotes: (notes: string) => set({ notes }),
+      setContactMethod: (method: ContactMethod) => set({ contactMethod: method }),
+      reset: () => set(initialState),
+    }),
+    {
+      name: 'booking-form',
+      storage: createJSONStorage(() => sessionStorage),
+    },
+  ),
+)

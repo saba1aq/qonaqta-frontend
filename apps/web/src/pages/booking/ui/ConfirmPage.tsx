@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useParams, Link, useNavigate } from '@tanstack/react-router'
 import { ArrowLeft } from 'lucide-react'
 import { useBranchDetail } from '@/entities/restaurant'
@@ -36,6 +36,14 @@ export function ConfirmPage() {
   const [localNotes, setLocalNotes] = useState(notes)
   const [success, setSuccess] = useState(false)
 
+  useEffect(() => {
+    if (sessionStorage.getItem('booking_completed') === '1') {
+      sessionStorage.removeItem('booking_completed')
+      reset()
+      navigate({ to: '/' })
+    }
+  }, [reset, navigate])
+
   const formattedDate = date
     ? new Date(date).toLocaleDateString('ru-RU', {
         weekday: 'short',
@@ -61,6 +69,7 @@ export function ConfirmPage() {
       notes: localNotes || undefined,
     })
 
+    sessionStorage.setItem('booking_completed', '1')
     setSuccess(true)
   }
 
@@ -68,9 +77,12 @@ export function ConfirmPage() {
     return (
       <BookingSuccess
         branchName={branch?.name}
+        branchAddress={branch?.address}
         formattedDate={formattedDate}
         timeSlot={timeSlot}
+        guestCount={guestCount}
         onGoHome={() => {
+          sessionStorage.removeItem('booking_completed')
           reset()
           navigate({ to: '/' })
         }}
@@ -82,15 +94,24 @@ export function ConfirmPage() {
 
   return (
     <div className="pb-24">
-      <div className="flex items-center gap-3 px-4 py-3 border-b">
-        <Link
-          to="/restaurant/$id/book"
-          params={{ id }}
-          className="w-9 h-9 rounded-full flex items-center justify-center"
-        >
-          <ArrowLeft className="w-5 h-5" />
-        </Link>
-        <h1 className="text-base font-semibold">Подтверждение</h1>
+      <div className="px-4 py-3 border-b">
+        <div className="flex items-center gap-3">
+          <Link
+            to="/restaurant/$id/book"
+            params={{ id }}
+            className="w-9 h-9 rounded-full flex items-center justify-center"
+          >
+            <ArrowLeft className="w-5 h-5" />
+          </Link>
+          <div className="flex-1">
+            <p className="text-[11px] uppercase tracking-wider text-neutral-400 font-semibold">Шаг 2 из 2</p>
+            <h1 className="text-[15px] font-semibold">Подтверждение</h1>
+          </div>
+        </div>
+        <div className="mt-3 flex gap-1 h-1">
+          <div className="flex-1 rounded-full bg-neutral-900" />
+          <div className="flex-1 rounded-full bg-neutral-900" />
+        </div>
       </div>
 
       <div className="p-4 space-y-4">
@@ -195,7 +216,11 @@ export function ConfirmPage() {
       <div className="fixed bottom-0 left-0 right-0 max-w-120 mx-auto z-30">
         <div className="bg-white/80 backdrop-blur-xl border-t border-neutral-100 px-5 py-4">
           <Button
-            className="w-full h-13 rounded-2xl text-[15px] font-semibold bg-neutral-900 text-white hover:bg-neutral-800 active:scale-[0.98] transition-all shadow-lg shadow-neutral-900/20"
+            className={
+              canSubmit
+                ? 'w-full h-13 rounded-2xl text-[15px] font-semibold bg-neutral-900 text-white hover:bg-neutral-800 active:scale-[0.98] transition-all shadow-lg shadow-neutral-900/20'
+                : 'w-full h-13 rounded-2xl text-[15px] font-medium bg-neutral-100 text-neutral-400 transition-all'
+            }
             disabled={!canSubmit || createBooking.isPending}
             onClick={handleSubmit}
           >
