@@ -19,6 +19,7 @@ export interface Restaurant {
 
 export interface RestaurantDetail extends Restaurant {
   cuisines: Cuisine[]
+  features: Feature[]
   photos: Photo[]
   schedules: Schedule[]
   city: { id: number; name: string; slug: string }
@@ -44,6 +45,14 @@ export interface Cuisine {
   id: number
   name: string
   slug: string
+  is_active: boolean
+}
+
+export interface Feature {
+  id: number
+  name: string
+  slug: string
+  icon: string
   is_active: boolean
 }
 
@@ -76,4 +85,5 @@ export interface UpdateRestaurantPayload {
   two_gis?: string
   is_active?: boolean
   cuisine_ids?: number[]
+  feature_ids?: number[]
 }

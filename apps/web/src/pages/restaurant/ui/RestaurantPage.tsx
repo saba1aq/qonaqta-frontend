@@ -9,7 +9,7 @@ import { DescriptionSection } from './DescriptionSection'
 import { ScheduleSection } from './ScheduleSection'
 import { StatusChip } from './StatusChip'
 import { LocationCard } from './LocationCard'
-
+import { FeaturesSection } from './FeaturesSection'
 
 export function RestaurantPage() {
   const { id } = useParams({ strict: false }) as { id: string }
@@ -95,20 +95,46 @@ export function RestaurantPage() {
         </div>
 
         <div className="px-5 pb-36 space-y-6">
-          {branch.cuisines.length > 0 && (
-            <div className="flex gap-2 flex-wrap">
-              {branch.cuisines.map((c) => (
-                <span
-                  key={c.id}
-                  className="px-4 py-2.5 rounded-full text-[13px] font-medium bg-neutral-100 text-neutral-700"
-                >
-                  {c.name}
-                </span>
-              ))}
-            </div>
-          )}
+          {branch.cuisines.length > 0 && (() => {
+            const half = Math.ceil(branch.cuisines.length / 2)
+            const row1 = branch.cuisines.slice(0, half)
+            const row2 = branch.cuisines.slice(half)
+            return (
+              <div
+                className="-mx-5 px-5 overflow-x-auto"
+                style={{ scrollbarWidth: 'none' }}
+              >
+                <div className="flex flex-col items-start gap-2 w-max">
+                  <div className="flex gap-2">
+                    {row1.map((c) => (
+                      <span
+                        key={c.id}
+                        className="px-4 py-2.5 rounded-full text-[13px] font-medium bg-neutral-100 text-neutral-700 whitespace-nowrap"
+                      >
+                        {c.name}
+                      </span>
+                    ))}
+                  </div>
+                  {row2.length > 0 && (
+                    <div className="flex gap-2">
+                      {row2.map((c) => (
+                        <span
+                          key={c.id}
+                          className="px-4 py-2.5 rounded-full text-[13px] font-medium bg-neutral-100 text-neutral-700 whitespace-nowrap"
+                        >
+                          {c.name}
+                        </span>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </div>
+            )
+          })()}
 
           <ActionButtons branch={branch} />
+
+          <FeaturesSection features={branch.features} />
 
           {branch.description && (
             <DescriptionSection description={branch.description} />

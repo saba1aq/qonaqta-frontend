@@ -14,6 +14,7 @@ import {
   useCities,
 } from "@/features/restaurants"
 import { useCuisines } from "@/features/cuisines"
+import { useFeatures } from "@/features/features-catalog"
 import type { RestaurantDetail, Schedule } from "@/features/restaurants"
 import { PhoneInput } from "@/shared/ui/phone-input"
 import { normalizePhone } from "@/shared/lib/format-phone"
@@ -207,6 +208,67 @@ function CuisinesSection({ restaurant }: { restaurant: RestaurantDetail }) {
     </div>
   )
 }
+
+function FeaturesSection({ restaurant }: { restaurant: RestaurantDetail }) {
+  const { data: allFeatures } = useFeatures()
+  const [selectedIds, setSelectedIds] = useState<number[]>(restaurant.features.map((f) => f.id))
+  const updateMutation = useUpdateRestaurant()
+
+  const toggle = (id: number) => {
+    setSelectedIds((prev) =>
+      prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]
+    )
+  }
+
+  const handleSave = () => {
+    updateMutation.mutate({
+      id: restaurant.id,
+      payload: { feature_ids: selectedIds },
+    })
+  }
+
+  return (
+    <div className="rounded-2xl border border-neutral-100 bg-white p-6">
+      <h2 className="text-[15px] font-semibold text-neutral-900">Особенности</h2>
+      <div className="mt-4 flex flex-wrap gap-2">
+        {allFeatures?.filter((f) => f.is_active).map((feature) => (
+          <label
+            key={feature.id}
+            className={cn(
+              "flex cursor-pointer items-center gap-2 rounded-xl border px-3 py-2 text-[13px] transition-colors",
+              selectedIds.includes(feature.id)
+                ? "border-neutral-900 bg-neutral-900 text-white"
+                : "border-neutral-200 bg-white text-neutral-700 hover:border-neutral-300"
+            )}
+          >
+            <input
+              type="checkbox"
+              checked={selectedIds.includes(feature.id)}
+              onChange={() => toggle(feature.id)}
+              className="hidden"
+            />
+            {feature.icon && <span>{feature.icon}</span>}
+            {feature.name}
+          </label>
+        ))}
+      </div>
+      {(!allFeatures || allFeatures.length === 0) && (
+        <p className="mt-4 text-[13px] text-neutral-400">Нет доступных особенностей</p>
+      )}
+      <div className="mt-6">
+        <Button
+          onClick={handleSave}
+          disabled={updateMutation.isPending}
+          className="gap-1.5 rounded-xl bg-neutral-900 text-[13px] text-white hover:bg-neutral-800"
+        >
+          <Save className="size-4" />
+          {updateMutation.isPending ? "Сохранение..." : "Сохранить"}
+        </Button>
+      </div>
+    </div>
+  )
+}
+
 
 function PhotosSection({ restaurant }: { restaurant: RestaurantDetail }) {
   const fileInputRef = useRef<HTMLInputElement>(null)
@@ -411,6 +473,7 @@ export function RestaurantDetailPage() {
       <div className="mt-8 space-y-6">
         <BasicInfoSection key={`info-${restaurant.id}`} restaurant={restaurant} cities={cities ?? []} />
         <CuisinesSection key={`cuisines-${restaurant.id}`} restaurant={restaurant} />
+        <FeaturesSection key={`features-${restaurant.id}`} restaurant={restaurant} />
         <PhotosSection key={`photos-${restaurant.id}`} restaurant={restaurant} />
         <ScheduleSection key={`schedule-${restaurant.id}`} restaurant={restaurant} />
       </div>

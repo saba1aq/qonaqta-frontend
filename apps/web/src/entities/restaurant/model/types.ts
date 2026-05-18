@@ -11,6 +11,14 @@ export interface Cuisine {
   slug: string
 }
 
+export interface Feature {
+  id: number
+  name: string
+  slug: string
+  icon: string
+  is_active: boolean
+}
+
 export interface BranchPhoto {
   id: number
   image_url: string
@@ -56,4 +64,5 @@ export interface BranchDetail extends BranchList {
   city: { id: number; name: string; slug: string }
   status: BranchStatus | null
   today_dow: number | null
+  features: Feature[]
 }

@@ -3,6 +3,7 @@ import {
   Store,
   CalendarCheck,
   UtensilsCrossed,
+  Sparkles,
   LogOut,
   ChevronLeft,
 } from "lucide-react"
@@ -18,6 +19,7 @@ interface SidebarProps {
 const navItems = [
   { path: "/restaurants", label: "Рестораны", icon: Store, exact: false },
   { path: "/cuisines", label: "Кухни", icon: UtensilsCrossed, exact: false },
+  { path: "/features", label: "Особенности", icon: Sparkles, exact: false },
   { path: "/bookings", label: "Брони", icon: CalendarCheck, exact: false },
 ]
 

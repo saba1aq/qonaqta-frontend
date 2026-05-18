@@ -11,7 +11,7 @@ export function ScheduleSection({
   schedules: BranchSchedule[]
   todayDow: number | null
 }) {
-  const [expanded, setExpanded] = useState(false)
+  const [expanded, setExpanded] = useState(true)
   const sorted = [...schedules].sort((a, b) => a.day_of_week - b.day_of_week)
   const todaySchedule = todayDow !== null ? schedules.find((s) => s.day_of_week === todayDow) : undefined
 
