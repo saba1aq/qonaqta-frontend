@@ -8,6 +8,8 @@ import { ActionButtons } from './ActionButtons'
 import { DescriptionSection } from './DescriptionSection'
 import { ScheduleSection } from './ScheduleSection'
 import { StatusChip } from './StatusChip'
+import { LocationCard } from './LocationCard'
+
 
 export function RestaurantPage() {
   const { id } = useParams({ strict: false }) as { id: string }
@@ -113,6 +115,14 @@ export function RestaurantPage() {
           )}
 
           <ScheduleSection schedules={branch.schedules} />
+
+          <LocationCard
+            address={branch.address}
+            city={branch.city.name}
+            twoGis={branch.two_gis}
+            latitude={branch.latitude}
+            longitude={branch.longitude}
+          />
         </div>
       </div>
 

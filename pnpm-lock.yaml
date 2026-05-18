@@ -154,6 +154,9 @@ importers:
 
   apps/web:
     dependencies:
+      '@2gis/mapgl':
+        specifier: ^1.72.3
+        version: 1.72.3
       '@fontsource-variable/geist':
         specifier: ^5.2.8
         version: 5.2.8
@@ -308,6 +311,10 @@ importers:
         version: 5.9.3
 
 packages:
+
+  '@2gis/mapgl@1.72.3':
+    resolution: {integrity: sha512-zda6GII3Rku7xlc0o0BtZaSfYUjRGQhrm2vcCDL7jxg3fbfwD7NTw77Cpdb2y+6a+iUNiKZ/o8JmizOwQeTVnw==}
+    engines: {node: '>=16.0.0'}
 
   '@babel/code-frame@7.29.0':
     resolution: {integrity: sha512-9NhCeYjq9+3uxgdtp20LSiJXJvN0FeCtNGpJxuMFZ1Kv3cWUNb6DOhJwUvcVCzKGR66cw4njwM6hrJLqgOwbcw==}
@@ -1595,6 +1602,9 @@ packages:
 
   '@types/estree@1.0.8':
     resolution: {integrity: sha512-dWHzHa2WqEXI/O1E9OjrocMTKJl2mSrEolh1Iomrv6U+JuNwaHXsXx9bLu5gG7BUWFIN0skIQJQ/L1rIex4X6w==}
+
+  '@types/geojson@7946.0.16':
+    resolution: {integrity: sha512-6C8nqWur3j98U6+lXDfTUWIfgvZU+EumvpHKcYjujKH7woYyLj2sUmff0tRhrqM7BohUw7Pz3ZB1jj2gW9Fvmg==}
 
   '@types/json-schema@7.0.15':
     resolution: {integrity: sha512-5+fP8P8MFNC+AyZCDxrB2pkZFPGzqQWUzpSeuuVLvm8VMcorNYavBqoFcxK8bQz4Qsbn4oUEEem4wDLfcysGHA==}
@@ -3399,6 +3409,10 @@ packages:
 
 snapshots:
 
+  '@2gis/mapgl@1.72.3':
+    dependencies:
+      '@types/geojson': 7946.0.16
+
   '@babel/code-frame@7.29.0':
     dependencies:
       '@babel/helper-validator-identifier': 7.28.5
@@ -4750,6 +4764,8 @@ snapshots:
     optional: true
 
   '@types/estree@1.0.8': {}
+
+  '@types/geojson@7946.0.16': {}
 
   '@types/json-schema@7.0.15': {}
 

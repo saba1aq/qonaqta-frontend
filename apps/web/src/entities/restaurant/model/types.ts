@@ -49,6 +49,8 @@ export interface BranchDetail extends BranchList {
   whatsapp: string | null
   website: string | null
   two_gis: string | null
+  latitude: number | null
+  longitude: number | null
   is_active: boolean
   schedules: BranchSchedule[]
   city: { id: number; name: string; slug: string }
