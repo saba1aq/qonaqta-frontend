@@ -1,0 +1,27 @@
+{
+  "name": "@qonaqta/entities",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./auth": "./src/auth/index.ts",
+    "./city": "./src/city/index.ts",
+    "./cuisine": "./src/cuisine/index.ts",
+    "./feature": "./src/feature/index.ts",
+    "./restaurant": "./src/restaurant/index.ts",
+    "./booking": "./src/booking/index.ts"
+  },
+  "dependencies": {
+    "axios": "^1.14.0",
+    "zod": "^4.3.6"
+  },
+  "peerDependencies": {
+    "@tanstack/react-query": "^5.95.2"
+  },
+  "devDependencies": {
+    "@qonaqta/config-typescript": "workspace:*",
+    "@tanstack/react-query": "^5.95.2",
+    "typescript": "~5.9.3"
+  }
+}
