@@ -1,3 +1,5 @@
 export { configureEntities, getApi, type EntitiesConfig } from "./client"
 export * from "./time"
 export { extractApiError } from "./error"
+export * from "./errors"
+export { ERROR_REGISTRY, type ApiErrorConstructor } from "./error-registry"
