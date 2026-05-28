@@ -46,12 +46,6 @@ export function ReservationDetailCard({
             <Clock className="size-3.5 shrink-0" />
             {reservation.startTime} — {reservation.endTime}
           </div>
-          {reservation.tableLabel && (
-            <div className="flex items-center gap-2 text-xs text-[#1C1C1C]/60">
-              <div className="size-3.5 shrink-0" />
-              {reservation.tableLabel}
-            </div>
-          )}
           {reservation.note && (
             <div className="flex items-start gap-2 text-xs">
               <MessageSquare className="mt-0.5 size-3.5 shrink-0 text-[#1C1C1C]/60" />

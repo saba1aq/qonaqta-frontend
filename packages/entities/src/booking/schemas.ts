@@ -23,10 +23,8 @@ export const BookingSchema = z.object({
   guest_name: z.string(),
   guest_phone: z.string(),
   contact_method: z.string(),
-  table_label: z.string().nullable(),
   notes: z.string().nullable(),
   created_at: z.string(),
-  cancelled_at: z.string().nullable(),
 })
 export type Booking = z.infer<typeof BookingSchema>
 

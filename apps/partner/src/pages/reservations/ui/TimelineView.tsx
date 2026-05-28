@@ -37,13 +37,7 @@ export function TimelineView({ reservations, currentTime, onConfirm, onCancel, o
   const currentHours = timeToHours(currentTime)
   const currentX = (currentHours - TIMELINE_START) * HOUR_WIDTH
 
-  const tableLabels = useMemo(() => {
-    const labels = new Set<string>()
-    for (const r of reservations) {
-      labels.add(r.tableLabel ?? "Без стола")
-    }
-    return Array.from(labels).sort()
-  }, [reservations])
+  const rowLabels = useMemo(() => ["Все брони"], [])
 
   const handleBlockClick = (reservation: Reservation, e: React.MouseEvent) => {
     if (selectedId === reservation.id) {
@@ -81,11 +75,11 @@ export function TimelineView({ reservations, currentTime, onConfirm, onCancel, o
         <div className="shrink-0" style={{ width: TABLE_COL_WIDTH }}>
           <div className="flex h-10 items-center border-b border-[#F3F3F3] px-4">
             <span className="text-[11px] font-medium uppercase tracking-[0.5px] text-[#1C1C1C]/40">
-              Столы
+              Брони
             </span>
           </div>
           <div>
-            {tableLabels.map((label, i) => (
+            {rowLabels.map((label, i) => (
               <div
                 key={label}
                 className={cn(
@@ -117,7 +111,7 @@ export function TimelineView({ reservations, currentTime, onConfirm, onCancel, o
             </div>
 
             <div className="relative">
-              {tableLabels.map((label, i) => (
+              {rowLabels.map((label, i) => (
                 <div
                   key={label}
                   className={cn(
@@ -133,16 +127,14 @@ export function TimelineView({ reservations, currentTime, onConfirm, onCancel, o
                       style={{ left: (h - TIMELINE_START) * HOUR_WIDTH, width: HOUR_WIDTH }}
                     />
                   ))}
-                  {reservations
-                    .filter((r) => (r.tableLabel ?? "Без стола") === label)
-                    .map((r) => (
-                      <ReservationBlock
-                        key={r.id}
-                        reservation={r}
-                        isSelected={selectedId === r.id}
-                        onClick={(e) => handleBlockClick(r, e)}
-                      />
-                    ))}
+                  {reservations.map((r) => (
+                    <ReservationBlock
+                      key={r.id}
+                      reservation={r}
+                      isSelected={selectedId === r.id}
+                      onClick={(e) => handleBlockClick(r, e)}
+                    />
+                  ))}
                 </div>
               ))}
 

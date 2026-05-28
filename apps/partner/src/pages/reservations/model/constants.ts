@@ -50,15 +50,15 @@ export const STATUS_STYLES: Record<ReservationStatus, {
 };
 
 export const MOCK_RESERVATIONS: Reservation[] = [
-  { id: "r1", guestName: "Айдана М.", guestPhone: "+7 707 111 2233", partySize: 3, startTime: "12:00", endTime: "14:00", tableLabel: "Стол 1", status: "completed", note: "Бизнес-ланч" },
-  { id: "r2", guestName: "Бекзат К.", guestPhone: "+7 701 222 3344", partySize: 2, startTime: "12:30", endTime: "14:00", tableLabel: "Стол 2", status: "completed" },
-  { id: "r3", guestName: "Гульнара С.", guestPhone: "+7 777 333 4455", partySize: 5, startTime: "13:00", endTime: "15:00", tableLabel: "Стол 3", status: "completed" },
-  { id: "r7", guestName: "Даулет К.", guestPhone: "+7 700 888 9900", partySize: 4, startTime: "18:00", endTime: "20:30", tableLabel: "Стол 1", status: "seated", seatedMinutes: 27 },
-  { id: "r8", guestName: "Мадина А.", guestPhone: "+7 707 999 0011", partySize: 6, startTime: "18:30", endTime: "21:00", tableLabel: "Стол 3", status: "seated", seatedMinutes: 12 },
-  { id: "r11", guestName: "Асель Т.", guestPhone: "+7 707 123 4567", partySize: 3, startTime: "19:00", endTime: "21:00", tableLabel: "Стол 5", status: "confirmed", note: "День рождения" },
-  { id: "r12", guestName: "Марат С.", guestPhone: "+7 702 234 5678", partySize: 2, startTime: "19:30", endTime: "21:30", tableLabel: "Стол 4", status: "pending" },
-  { id: "r13", guestName: "Сауле Ж.", guestPhone: "+7 705 345 6789", partySize: 4, startTime: "19:00", endTime: "21:00", tableLabel: "Стол 8", status: "confirmed" },
-  { id: "r15", guestName: "Жанна К.", guestPhone: "+7 700 567 8901", partySize: 4, startTime: "20:00", endTime: "22:00", tableLabel: "Стол 9", status: "confirmed" },
-  { id: "r17", guestName: "Руслан М.", guestPhone: "+7 701 789 0123", partySize: 4, startTime: "20:00", endTime: "22:30", tableLabel: "Стол 10", status: "pending" },
-  { id: "r20", guestName: "Лаура Т.", guestPhone: "+7 705 012 3456", partySize: 3, startTime: "21:00", endTime: "23:00", tableLabel: "Стол 15", status: "pending" },
+  { id: "r1", guestName: "Айдана М.", guestPhone: "+7 707 111 2233", partySize: 3, startTime: "12:00", endTime: "14:00", status: "completed", note: "Бизнес-ланч" },
+  { id: "r2", guestName: "Бекзат К.", guestPhone: "+7 701 222 3344", partySize: 2, startTime: "12:30", endTime: "14:00", status: "completed" },
+  { id: "r3", guestName: "Гульнара С.", guestPhone: "+7 777 333 4455", partySize: 5, startTime: "13:00", endTime: "15:00", status: "completed" },
+  { id: "r7", guestName: "Даулет К.", guestPhone: "+7 700 888 9900", partySize: 4, startTime: "18:00", endTime: "20:30", status: "seated", seatedMinutes: 27 },
+  { id: "r8", guestName: "Мадина А.", guestPhone: "+7 707 999 0011", partySize: 6, startTime: "18:30", endTime: "21:00", status: "seated", seatedMinutes: 12 },
+  { id: "r11", guestName: "Асель Т.", guestPhone: "+7 707 123 4567", partySize: 3, startTime: "19:00", endTime: "21:00", status: "confirmed", note: "День рождения" },
+  { id: "r12", guestName: "Марат С.", guestPhone: "+7 702 234 5678", partySize: 2, startTime: "19:30", endTime: "21:30", status: "pending" },
+  { id: "r13", guestName: "Сауле Ж.", guestPhone: "+7 705 345 6789", partySize: 4, startTime: "19:00", endTime: "21:00", status: "confirmed" },
+  { id: "r15", guestName: "Жанна К.", guestPhone: "+7 700 567 8901", partySize: 4, startTime: "20:00", endTime: "22:00", status: "confirmed" },
+  { id: "r17", guestName: "Руслан М.", guestPhone: "+7 701 789 0123", partySize: 4, startTime: "20:00", endTime: "22:30", status: "pending" },
+  { id: "r20", guestName: "Лаура Т.", guestPhone: "+7 705 012 3456", partySize: 3, startTime: "21:00", endTime: "23:00", status: "pending" },
 ];

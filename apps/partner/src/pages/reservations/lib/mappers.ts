@@ -9,7 +9,6 @@ export interface ApiBooking {
   start_time: string
   guests_count: number
   status: string
-  table_label: string | null
 }
 
 export function mapApiBooking(b: ApiBooking): Reservation {
@@ -24,7 +23,6 @@ export function mapApiBooking(b: ApiBooking): Reservation {
     partySize: b.guests_count,
     startTime,
     endTime,
-    tableLabel: b.table_label ?? undefined,
     status: (b.status as Reservation["status"]) ?? "pending",
   }
 }

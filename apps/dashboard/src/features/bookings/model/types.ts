@@ -8,10 +8,8 @@ export interface Booking {
   status: "pending" | "confirmed" | "cancelled" | "completed" | "no_show"
   guest_name: string
   guest_phone: string
-  table_label: string | null
   notes: string | null
   created_at: string
-  cancelled_at: string | null
 }
 
 export type BookingStatus = Booking["status"]

@@ -22,5 +22,4 @@ export interface Booking {
   contact_method: 'phone' | 'whatsapp'
   notes: string | null
   created_at: string
-  cancelled_at: string | null
 }
