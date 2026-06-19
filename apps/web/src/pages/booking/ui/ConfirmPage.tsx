@@ -104,9 +104,9 @@ export function ConfirmPage() {
           >
             <ArrowLeft className="w-5 h-5" />
           </Link>
-          <div className="flex-1">
-            <p className="text-[11px] uppercase tracking-wider text-neutral-400 font-semibold">Шаг 2 из 2</p>
-            <h1 className="text-[15px] font-semibold">Подтверждение</h1>
+          <div className="flex-1 min-w-0">
+            <h1 className="text-[15px] font-semibold truncate">{branch?.name ?? ''}</h1>
+            <p className="text-[12px] text-neutral-500 truncate">{branch?.address ?? ''}</p>
           </div>
         </div>
         <div className="mt-3 flex gap-1 h-1">
@@ -116,19 +116,20 @@ export function ConfirmPage() {
       </div>
 
       <div className="flex-1 min-h-0 overflow-y-auto">
-        <div className="px-5 pt-5 pb-3">
-        {branch && (
-          <BookingSummary
-            branch={branch}
-            formattedDate={formattedDate}
-            timeSlot={timeSlot}
-            guestCount={guestCount}
-            id={id}
-          />
-        )}
-      </div>
+        <div className="px-5 pt-5 space-y-3.5">
+        <div className="space-y-3">
+          <h2 className="text-[20px] font-bold text-neutral-900">Детали брони</h2>
+          {branch && (
+            <BookingSummary
+              formattedDate={formattedDate}
+              timeSlot={timeSlot}
+              guestCount={guestCount}
+            />
+          )}
+        </div>
 
-      <div className="px-5 space-y-3.5">
+        <h2 className="text-[20px] font-bold text-neutral-900 pt-2">Ваши данные</h2>
+
         <div>
           <label className="text-[13px] font-medium text-neutral-600 mb-1.5 block">Имя</label>
           <Input

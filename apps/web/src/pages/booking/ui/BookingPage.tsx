@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { useParams, useNavigate, Link } from '@tanstack/react-router'
 import { ArrowLeft } from 'lucide-react'
 import { useBranchDetail, useBranchSlots } from '@/entities/restaurant'
@@ -6,6 +7,14 @@ import { Button } from '@qonaqta/ui/components/button'
 import { GuestCountSelector } from './GuestCountSelector'
 import { CalendarGrid } from './CalendarGrid'
 import { TimeSlotPicker } from './TimeSlotPicker'
+import { formatDate } from '../lib/time-slots'
+
+function addDays(dateStr: string, days: number): string {
+  const [y, m, d] = dateStr.split('-').map(Number)
+  const dt = new Date(y, m - 1, d)
+  dt.setDate(dt.getDate() + days)
+  return formatDate(dt)
+}
 
 export function BookingPage() {
   const { id } = useParams({ strict: false }) as { id: string }
@@ -15,7 +24,16 @@ export function BookingPage() {
   const { guestCount, date, timeSlot, setGuestCount, setDate, setTimeSlot } =
     useBookingFormStore()
 
-  const { data: timeSlots = [] } = useBranchSlots(id, date)
+  const { data: timeSlots = [], isFetched } = useBranchSlots(id, date)
+
+  useEffect(() => {
+    if (!date || !isFetched || timeSlots.length > 0) return
+    const today = formatDate(new Date())
+    const lastAllowed = addDays(today, 13)
+    if (date < lastAllowed) {
+      setDate(addDays(date, 1))
+    }
+  }, [date, isFetched, timeSlots.length, setDate])
 
   const canProceed = date && timeSlot
 
@@ -30,9 +48,9 @@ export function BookingPage() {
           >
             <ArrowLeft className="w-5 h-5" />
           </Link>
-          <div className="flex-1">
-            <p className="text-[11px] uppercase tracking-wider text-neutral-400 font-semibold">Шаг 1 из 2</p>
-            <h1 className="text-[15px] font-semibold">Детали бронирования</h1>
+          <div className="flex-1 min-w-0">
+            <h1 className="text-[15px] font-semibold truncate">{branch?.name ?? ''}</h1>
+            <p className="text-[12px] text-neutral-500 truncate">{branch?.address ?? ''}</p>
           </div>
         </div>
         <div className="mt-3 flex gap-1 h-1">

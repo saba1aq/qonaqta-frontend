@@ -4,11 +4,9 @@ import { useBranchDetail } from '@/entities/restaurant'
 import type { BranchPhoto } from '@/entities/restaurant'
 import { Button } from '@qonaqta/ui/components/button'
 import { PhotoCarousel } from './PhotoCarousel'
-import { ActionButtons } from './ActionButtons'
 import { DescriptionSection } from './DescriptionSection'
 import { ScheduleSection } from './ScheduleSection'
 import { StatusChip } from './StatusChip'
-import { LocationCard } from './LocationCard'
 import { FeaturesSection } from './FeaturesSection'
 
 export function RestaurantPage() {
@@ -132,8 +130,6 @@ export function RestaurantPage() {
             )
           })()}
 
-          <ActionButtons branch={branch} />
-
           <FeaturesSection features={branch.features} />
 
           {branch.description && (
@@ -141,14 +137,6 @@ export function RestaurantPage() {
           )}
 
           <ScheduleSection schedules={branch.schedules} todayDow={branch.today_dow} />
-
-          <LocationCard
-            address={branch.address}
-            city={branch.city.name}
-            twoGis={branch.two_gis}
-            latitude={branch.latitude}
-            longitude={branch.longitude}
-          />
         </div>
       </div>
 

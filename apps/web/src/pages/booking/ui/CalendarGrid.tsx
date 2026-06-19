@@ -7,6 +7,25 @@ const MONTH_NAMES = [
   'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь',
 ]
 const WEEK_DAYS_SHORT = ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб']
+const LEAD_TIME_MIN = 120
+const SLOT_MIN = 30
+
+function todayHasAvailableSlots(schedule: BranchSchedule | undefined): boolean {
+  if (!schedule || schedule.is_closed) return false
+  const now = new Date()
+  const cutoffMin = now.getHours() * 60 + now.getMinutes() + LEAD_TIME_MIN
+  const [oh, om] = schedule.open_time.split(':').map(Number)
+  const [ch, cm] = schedule.close_time.split(':').map(Number)
+  const openMin = oh * 60 + om
+  let closeMin = ch * 60 + cm
+  if (closeMin <= openMin) closeMin = 24 * 60
+  const endExclusive = closeMin === 24 * 60 ? closeMin : closeMin - SLOT_MIN
+  const firstSlot =
+    cutoffMin <= openMin
+      ? openMin
+      : openMin + Math.ceil((cutoffMin - openMin) / SLOT_MIN) * SLOT_MIN
+  return firstSlot < endExclusive
+}
 
 export function CalendarGrid({
   date,
@@ -19,20 +38,25 @@ export function CalendarGrid({
 }) {
   const today = new Date()
   today.setHours(0, 0, 0, 0)
-  const todayStr = formatDate(today)
+  const todayDow = today.getDay() === 0 ? 7 : today.getDay()
+  const todaySchedule = schedules?.find((s) => s.day_of_week === todayDow)
+  const skipToday = !todayHasAvailableSlots(todaySchedule)
+
+  const start = new Date(today)
+  if (skipToday) start.setDate(start.getDate() + 1)
 
   const days: Date[] = []
   for (let i = 0; i < 14; i++) {
-    const d = new Date(today)
-    d.setDate(today.getDate() + i)
+    const d = new Date(start)
+    d.setDate(start.getDate() + i)
     days.push(d)
   }
 
   const lastDay = days[days.length - 1]
   const headerLabel =
-    today.getMonth() === lastDay.getMonth()
-      ? MONTH_NAMES[today.getMonth()]
-      : `${MONTH_NAMES[today.getMonth()]} – ${MONTH_NAMES[lastDay.getMonth()]}`
+    start.getMonth() === lastDay.getMonth()
+      ? MONTH_NAMES[start.getMonth()]
+      : `${MONTH_NAMES[start.getMonth()]} – ${MONTH_NAMES[lastDay.getMonth()]}`
 
   return (
     <div className="rounded-2xl border border-neutral-200 bg-white p-4">
@@ -46,7 +70,6 @@ export function CalendarGrid({
           {days.map((day) => {
             const dateStr = formatDate(day)
             const isSelected = dateStr === date
-            const isToday = dateStr === todayStr
             const dayOfWeek = day.getDay() === 0 ? 7 : day.getDay()
             const schedule = schedules?.find((s) => s.day_of_week === dayOfWeek)
             const isClosed = schedule?.is_closed ?? false
@@ -61,9 +84,7 @@ export function CalendarGrid({
                     ? 'bg-foreground text-white'
                     : isClosed
                       ? 'text-neutral-300'
-                      : isToday
-                        ? 'bg-neutral-100 text-neutral-900 hover:bg-neutral-200'
-                        : 'text-neutral-900 hover:bg-neutral-50'
+                      : 'text-neutral-900 hover:bg-neutral-50'
                 }`}
               >
                 <span className="text-lg font-bold leading-none">{day.getDate()}</span>
