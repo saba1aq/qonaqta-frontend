@@ -1,3 +1,4 @@
+import { CalendarDays } from 'lucide-react'
 import type { BranchSchedule } from '@/entities/restaurant'
 import { formatDate } from '../lib/time-slots'
 
@@ -5,15 +6,7 @@ const MONTH_NAMES = [
   'Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь',
   'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь',
 ]
-const WEEK_DAYS = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс']
-
-function startOfWeek(d: Date): Date {
-  const result = new Date(d)
-  result.setHours(0, 0, 0, 0)
-  const dow = (result.getDay() + 6) % 7
-  result.setDate(result.getDate() - dow)
-  return result
-}
+const WEEK_DAYS_SHORT = ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб']
 
 export function CalendarGrid({
   date,
@@ -26,54 +19,65 @@ export function CalendarGrid({
 }) {
   const today = new Date()
   today.setHours(0, 0, 0, 0)
+  const todayStr = formatDate(today)
 
-  const gridStart = startOfWeek(today)
   const days: Date[] = []
   for (let i = 0; i < 14; i++) {
-    const d = new Date(gridStart)
-    d.setDate(gridStart.getDate() + i)
+    const d = new Date(today)
+    d.setDate(today.getDate() + i)
     days.push(d)
   }
 
-  const headerLabel = `${MONTH_NAMES[gridStart.getMonth()]} ${gridStart.getFullYear()}`
+  const lastDay = days[days.length - 1]
+  const headerLabel =
+    today.getMonth() === lastDay.getMonth()
+      ? MONTH_NAMES[today.getMonth()]
+      : `${MONTH_NAMES[today.getMonth()]} – ${MONTH_NAMES[lastDay.getMonth()]}`
 
   return (
     <div className="rounded-2xl border border-neutral-200 bg-white p-4">
-      <h3 className="text-sm font-semibold text-center mb-3">{headerLabel}</h3>
-
-      <div className="grid grid-cols-7 gap-1 mb-1">
-        {WEEK_DAYS.map((d) => (
-          <div key={d} className="text-center text-[11px] text-muted-foreground font-medium py-1">
-            {d}
-          </div>
-        ))}
+      <div className="flex items-center justify-between mb-3">
+        <h3 className="text-lg font-bold text-neutral-900">{headerLabel}</h3>
+        <CalendarDays className="size-5 text-neutral-500" />
       </div>
-      <div className="grid grid-cols-7 gap-1">
-        {days.map((day) => {
-          const dateStr = formatDate(day)
-          const isPast = day < today
-          const isSelected = dateStr === date
-          const dayOfWeek = day.getDay() === 0 ? 7 : day.getDay()
-          const schedule = schedules?.find((s) => s.day_of_week === dayOfWeek)
-          const isClosed = schedule?.is_closed ?? false
 
-          return (
-            <button
-              key={dateStr}
-              disabled={isPast || isClosed}
-              onClick={() => onSelect(dateStr)}
-              className={`h-10 rounded-lg text-sm font-medium transition-colors ${
-                isSelected
-                  ? 'bg-foreground text-white'
-                  : isPast || isClosed
-                    ? 'text-muted-foreground/40'
-                    : 'hover:bg-secondary'
-              }`}
-            >
-              {day.getDate()}
-            </button>
-          )
-        })}
+      <div className="-mx-4 overflow-x-auto px-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+        <div className="flex gap-2 min-w-max">
+          {days.map((day) => {
+            const dateStr = formatDate(day)
+            const isSelected = dateStr === date
+            const isToday = dateStr === todayStr
+            const dayOfWeek = day.getDay() === 0 ? 7 : day.getDay()
+            const schedule = schedules?.find((s) => s.day_of_week === dayOfWeek)
+            const isClosed = schedule?.is_closed ?? false
+
+            return (
+              <button
+                key={dateStr}
+                disabled={isClosed}
+                onClick={() => onSelect(dateStr)}
+                className={`flex flex-col items-center justify-center w-12 h-16 rounded-xl shrink-0 transition-colors ${
+                  isSelected
+                    ? 'bg-foreground text-white'
+                    : isClosed
+                      ? 'text-neutral-300'
+                      : isToday
+                        ? 'bg-neutral-100 text-neutral-900 hover:bg-neutral-200'
+                        : 'text-neutral-900 hover:bg-neutral-50'
+                }`}
+              >
+                <span className="text-lg font-bold leading-none">{day.getDate()}</span>
+                <span
+                  className={`text-[11px] mt-1 leading-none ${
+                    isSelected ? 'text-white/70' : 'text-neutral-400'
+                  }`}
+                >
+                  {WEEK_DAYS_SHORT[day.getDay()]}
+                </span>
+              </button>
+            )
+          })}
+        </div>
       </div>
     </div>
   )
