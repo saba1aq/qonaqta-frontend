@@ -83,14 +83,14 @@ export function CalendarGrid({
                   isSelected
                     ? 'bg-foreground text-white'
                     : isClosed
-                      ? 'text-neutral-300'
+                      ? 'text-red-400'
                       : 'text-neutral-900 hover:bg-neutral-50'
                 }`}
               >
                 <span className="text-lg font-bold leading-none">{day.getDate()}</span>
                 <span
                   className={`text-[11px] mt-1 leading-none ${
-                    isSelected ? 'text-white/70' : 'text-neutral-400'
+                    isSelected ? 'text-white/70' : isClosed ? 'text-red-400/70' : 'text-neutral-400'
                   }`}
                 >
                   {WEEK_DAYS_SHORT[day.getDay()]}
