@@ -48,7 +48,7 @@ export function RestaurantPage() {
     return (
       <div className="flex flex-col items-center justify-center h-[60vh] text-neutral-400">
         <p className="text-lg font-medium">Ресторан не найден</p>
-        <Link to="/" className="mt-3 text-sm text-neutral-900 underline underline-offset-4">
+        <Link to="/restaurants" className="mt-3 text-sm text-neutral-900 underline underline-offset-4">
           На главную
         </Link>
       </div>
@@ -62,7 +62,7 @@ export function RestaurantPage() {
 
         <div className="absolute top-0 left-0 right-0 flex items-center justify-between p-4 z-10">
           <Link
-            to="/"
+            to="/restaurants"
             className="size-10 rounded-full bg-white/90 backdrop-blur-sm flex items-center justify-center shadow-sm active:scale-95 transition-transform"
           >
             <ArrowLeft className="size-5 text-neutral-900" />

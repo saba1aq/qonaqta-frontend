@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useBranches, useCities, useCuisines } from '@/entities/restaurant'
 import { useDebounce } from '@/shared/lib/use-debounce'
+import { Navbar } from '@/widgets/navbar'
 import { CityPicker } from './CityPicker'
 import { SearchBar } from './SearchBar'
 import { CuisineFilter } from './CuisineFilter'
@@ -57,7 +58,7 @@ export function HomePage() {
         />
       </div>
 
-      <div className="flex-1 overflow-y-auto px-4 pt-2 pb-8">
+      <div className="flex-1 overflow-y-auto px-4 pt-2 pb-24">
         {isLoading ? (
           <div className="flex flex-col gap-4">
             {[1, 2, 3].map((i) => (
@@ -74,6 +75,8 @@ export function HomePage() {
           </div>
         )}
       </div>
+
+      <Navbar />
     </div>
   )
 }

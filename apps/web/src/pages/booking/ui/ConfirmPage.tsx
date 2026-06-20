@@ -40,7 +40,7 @@ export function ConfirmPage() {
     if (sessionStorage.getItem('booking_completed') === '1') {
       sessionStorage.removeItem('booking_completed')
       reset()
-      navigate({ to: '/' })
+      navigate({ to: '/restaurants' })
     }
   }, [reset, navigate])
 
@@ -84,7 +84,7 @@ export function ConfirmPage() {
         onGoHome={() => {
           sessionStorage.removeItem('booking_completed')
           reset()
-          navigate({ to: '/' })
+          navigate({ to: '/restaurants' })
         }}
       />
     )

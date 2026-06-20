@@ -1,5 +1,6 @@
 import { createRouter, createRoute, createRootRoute, Outlet } from '@tanstack/react-router'
 import { MobileLayout } from './providers/mobile-layout'
+import { LandingPage } from '@/pages/landing'
 import { HomePage } from '@/pages/home'
 import { RestaurantPage } from '@/pages/restaurant'
 import { BookingPage, ConfirmPage } from '@/pages/booking'
@@ -14,9 +15,15 @@ const rootRoute = createRootRoute({
   ),
 })
 
-const homeRoute = createRoute({
+const landingRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/',
+  component: LandingPage,
+})
+
+const restaurantsRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/restaurants',
   component: HomePage,
 })
 
@@ -51,7 +58,8 @@ const authRoute = createRoute({
 })
 
 const routeTree = rootRoute.addChildren([
-  homeRoute,
+  landingRoute,
+  restaurantsRoute,
   restaurantRoute,
   bookingRoute,
   confirmRoute,

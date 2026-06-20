@@ -38,7 +38,7 @@ export function AuthPage() {
     try {
       const { data } = await apiClient.post<TokenResponse>('/auth/verify-code', { phone, code: otp })
       login(data)
-      navigate({ to: '/' })
+      navigate({ to: '/restaurants' })
     } catch {
       setError('Неверный код')
     } finally {
@@ -56,7 +56,7 @@ export function AuthPage() {
               setOtp('')
               setError('')
             } else {
-              navigate({ to: '/' })
+              navigate({ to: '/restaurants' })
             }
           }}
           className="w-9 h-9 rounded-full flex items-center justify-center"
