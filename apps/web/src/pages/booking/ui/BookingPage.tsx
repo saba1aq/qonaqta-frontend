@@ -3,10 +3,10 @@ import { useParams, useNavigate, Link } from '@tanstack/react-router'
 import { ArrowLeft } from 'lucide-react'
 import { useBranchDetail, useBranchSlots } from '@/entities/restaurant'
 import { useBookingFormStore } from '@/features/book-table'
-import { Button } from '@qonaqta/ui/components/button'
 import { GuestCountSelector } from './GuestCountSelector'
 import { CalendarGrid } from './CalendarGrid'
 import { TimeSlotPicker } from './TimeSlotPicker'
+import { Ticket } from './Ticket'
 import { formatDate } from '../lib/time-slots'
 
 function addDays(dateStr: string, days: number): string {
@@ -35,63 +35,66 @@ export function BookingPage() {
     }
   }, [date, isFetched, timeSlots.length, setDate])
 
-  const canProceed = date && timeSlot
+  const canProceed = Boolean(date && timeSlot)
+
+  const formattedDate = date
+    ? new Date(date).toLocaleDateString('ru-RU', { weekday: 'short', day: 'numeric', month: 'long' })
+    : '—'
 
   return (
-    <div className="flex flex-col h-svh">
-      <div className="shrink-0 px-4 py-3 border-b border-neutral-100 bg-white">
-        <div className="flex items-center gap-3">
-          <Link
-            to="/restaurant/$id"
-            params={{ id }}
-            className="w-9 h-9 rounded-full flex items-center justify-center"
-          >
-            <ArrowLeft className="w-5 h-5" />
-          </Link>
-          <div className="flex-1 min-w-0">
-            <h1 className="text-[15px] font-semibold truncate">{branch?.name ?? ''}</h1>
-            <p className="text-[12px] text-neutral-500 truncate">{branch?.address ?? ''}</p>
-          </div>
-        </div>
-        <div className="mt-3 flex gap-1 h-1">
-          <div className="flex-1 rounded-full bg-neutral-900" />
-          <div className="flex-1 rounded-full bg-neutral-200" />
-        </div>
-      </div>
-
-      <div className="flex-1 min-h-0 overflow-y-auto p-4 space-y-6">
-        <GuestCountSelector count={guestCount} onChange={setGuestCount} />
-
-        <div>
-          <h3 className="text-sm font-semibold mb-3">Дата</h3>
-          <CalendarGrid
-            date={date}
-            onSelect={setDate}
-            schedules={branch?.schedules}
-          />
-        </div>
-
-        {date && (
-          <TimeSlotPicker
-            slots={timeSlots}
-            selected={timeSlot}
-            onSelect={setTimeSlot}
-          />
-        )}
-      </div>
-
-      <div className="shrink-0 bg-white/80 backdrop-blur-xl border-t border-neutral-100 px-5 py-4">
-        <Button
-          className={
-            canProceed
-              ? 'w-full h-13 rounded-2xl text-[15px] font-semibold bg-neutral-900 text-white hover:bg-neutral-800 active:scale-[0.98] transition-all shadow-lg shadow-neutral-900/20'
-              : 'w-full h-13 rounded-2xl text-[15px] font-medium bg-neutral-100 text-neutral-400 transition-all'
-          }
-          disabled={!canProceed}
-          onClick={() => navigate({ to: '/restaurant/$id/book/confirm', params: { id } })}
+    <div className="mx-auto max-w-[1140px] px-[clamp(18px,4vw,44px)] pt-[clamp(22px,3vw,36px)] pb-36">
+      <div className="flex items-center justify-between gap-3 mb-4">
+        <Link
+          to="/restaurant/$id"
+          params={{ id }}
+          className="flex items-center gap-2 font-stamp uppercase tracking-[0.08em] text-[12px] hover:text-riso-pink transition-colors min-w-0"
         >
-          {!date ? 'Выберите дату' : !timeSlot ? 'Выберите время' : 'Продолжить'}
-        </Button>
+          <ArrowLeft className="size-4 shrink-0" />
+          <span className="truncate min-w-0">{branch?.name ?? 'Назад'}</span>
+        </Link>
+        <span className="font-stamp uppercase tracking-[0.1em] text-[12px] text-ink-soft shrink-0">
+          Шаг 1 / 2
+        </span>
+      </div>
+
+      <div className="border-t-2 border-ink pt-[clamp(20px,3vw,32px)] grid lg:grid-cols-[minmax(0,1fr)_0.72fr] gap-[clamp(24px,4vw,52px)] items-start">
+        <div className="space-y-8 min-w-0">
+          <h1 className="font-display font-bold tracking-[-0.035em] text-[clamp(26px,4.5vw,42px)]">
+            Дата, время и гости
+          </h1>
+          <GuestCountSelector count={guestCount} onChange={setGuestCount} />
+          <CalendarGrid date={date} onSelect={setDate} schedules={branch?.schedules} />
+          {date && <TimeSlotPicker slots={timeSlots} selected={timeSlot} onSelect={setTimeSlot} />}
+        </div>
+
+        <div className="lg:sticky lg:top-24 min-w-0 pr-1">
+          <div className="font-stamp uppercase tracking-[0.12em] text-[12px] text-ink-soft mb-3">
+            Ваш талон
+          </div>
+          <Ticket
+            branchName={branch?.name ?? '—'}
+            address={branch?.address}
+            formattedDate={formattedDate}
+            timeSlot={timeSlot}
+            guestCount={guestCount}
+          />
+        </div>
+      </div>
+
+      <div className="fixed bottom-0 left-0 right-0 z-30 bg-paper/90 backdrop-blur-md border-t-2 border-ink">
+        <div className="mx-auto max-w-[1140px] px-[clamp(18px,4vw,44px)] py-3.5 flex justify-end">
+          <button
+            disabled={!canProceed}
+            onClick={() => navigate({ to: '/restaurant/$id/book/confirm', params: { id } })}
+            className={`w-full sm:w-auto font-display font-bold text-[15px] px-7 py-4 transition-all ${
+              canProceed
+                ? 'bg-ink text-paper-3 shadow-[6px_6px_0_#f2315d] hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[9px_9px_0_#f2315d]'
+                : 'bg-paper-2 text-ink-soft border-2 border-ink cursor-not-allowed'
+            }`}
+          >
+            {!date ? 'Выберите дату' : !timeSlot ? 'Выберите время' : 'Продолжить →'}
+          </button>
+        </div>
       </div>
     </div>
   )

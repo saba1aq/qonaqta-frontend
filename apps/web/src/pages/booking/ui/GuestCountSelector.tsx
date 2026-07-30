@@ -9,22 +9,26 @@ export function GuestCountSelector({
 }) {
   return (
     <div>
-      <h3 className="text-sm font-semibold mb-3">Количество гостей</h3>
-      <div className="flex items-center gap-5">
+      <h3 className="font-stamp uppercase tracking-[0.12em] text-[12px] text-ink-soft mb-3">
+        Гости
+      </h3>
+      <div className="inline-flex border-2 border-ink">
         <button
           onClick={() => onChange(count - 1)}
           disabled={count <= 1}
-          className="w-10 h-10 rounded-full border border-border flex items-center justify-center disabled:opacity-30"
+          className="w-12 h-12 grid place-items-center bg-paper-3 hover:bg-riso-sun disabled:opacity-30 disabled:hover:bg-paper-3 transition-colors"
         >
-          <Minus className="w-4 h-4" />
+          <Minus className="size-4" />
         </button>
-        <span className="text-2xl font-semibold w-8 text-center">{count}</span>
+        <span className="w-16 grid place-items-center font-display font-bold text-[20px] border-x-2 border-ink">
+          {count}
+        </span>
         <button
           onClick={() => onChange(count + 1)}
           disabled={count >= 20}
-          className="w-10 h-10 rounded-full border border-border flex items-center justify-center disabled:opacity-30"
+          className="w-12 h-12 grid place-items-center bg-paper-3 hover:bg-riso-sun disabled:opacity-30 disabled:hover:bg-paper-3 transition-colors"
         >
-          <Plus className="w-4 h-4" />
+          <Plus className="size-4" />
         </button>
       </div>
     </div>

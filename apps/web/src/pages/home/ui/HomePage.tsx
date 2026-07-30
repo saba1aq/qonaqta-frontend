@@ -5,6 +5,7 @@ import { CityPicker } from './CityPicker'
 import { SearchBar } from './SearchBar'
 import { CuisineFilter } from './CuisineFilter'
 import { BranchCard } from './BranchCard'
+import { Misreg } from '@/shared/ui/misreg'
 
 export function HomePage() {
   const [searchQuery, setSearchQuery] = useState('')
@@ -15,6 +16,7 @@ export function HomePage() {
     const stored = localStorage.getItem('selected_city_id')
     return stored ? Number(stored) : undefined
   })
+  const [showCityPicker, setShowCityPicker] = useState(false)
 
   const { data: cities } = useCities()
   const { data: cuisines } = useCuisines()
@@ -34,11 +36,14 @@ export function HomePage() {
     setShowCityPicker(false)
   }
 
-  const [showCityPicker, setShowCityPicker] = useState(false)
-
   return (
-    <div className="flex flex-col h-svh">
-      <div className="flex-shrink-0 px-4 pt-4 pb-2 bg-white">
+    <div className="mx-auto max-w-[1140px] px-[clamp(18px,4vw,44px)] py-[clamp(20px,3vw,36px)]">
+      {/* header */}
+      <div className="flex items-end justify-between gap-4 flex-wrap mb-5">
+        <h1 className="font-display font-bold tracking-[-0.035em] text-[clamp(26px,5vw,44px)]">
+          Столы{' '}
+          <Misreg color="pink">{selectedCity?.name ?? 'города'}</Misreg>
+        </h1>
         <CityPicker
           cities={cities}
           selectedCityId={selectedCityId}
@@ -47,9 +52,10 @@ export function HomePage() {
           onTogglePicker={() => setShowCityPicker(!showCityPicker)}
           selectedCityName={selectedCity?.name}
         />
+      </div>
 
+      <div className="border-t-2 border-ink pt-5 space-y-4">
         <SearchBar value={searchQuery} onChange={setSearchQuery} />
-
         <CuisineFilter
           cuisines={cuisines}
           selectedId={selectedCuisineId}
@@ -57,19 +63,23 @@ export function HomePage() {
         />
       </div>
 
-      <div className="flex-1 overflow-y-auto px-4 pt-2 pb-4">
+      {/* grid */}
+      <div className="mt-7">
         {isLoading ? (
-          <div className="flex flex-col gap-4">
-            {[1, 2, 3].map((i) => (
-              <div key={i} className="rounded-2xl h-[200px] bg-muted animate-pulse" />
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+            {[0, 1, 2, 3, 4, 5].map((i) => (
+              <div key={i} className="border-2 border-ink bg-paper-2 aspect-[5/4] animate-pulse" />
             ))}
           </div>
         ) : branches?.length === 0 ? (
-          <p className="text-center text-muted-foreground py-8">Ничего не найдено</p>
+          <div className="border-2 border-dashed border-ink py-16 text-center">
+            <p className="font-display font-bold text-[22px]">Ничего не найдено</p>
+            <p className="text-ink-soft text-[14px] mt-2">Попробуйте другой запрос или кухню.</p>
+          </div>
         ) : (
-          <div className="flex flex-col gap-4">
-            {branches?.map((branch) => (
-              <BranchCard key={branch.id} branch={branch} />
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-x-5 gap-y-7">
+            {branches?.map((branch, i) => (
+              <BranchCard key={branch.id} branch={branch} index={i} />
             ))}
           </div>
         )}

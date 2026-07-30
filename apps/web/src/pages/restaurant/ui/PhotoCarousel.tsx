@@ -44,17 +44,17 @@ export function PhotoCarousel({
           ))}
         </div>
       ) : (
-        <div className="w-full h-full bg-gradient-to-br from-neutral-200 to-neutral-300" />
+        <div className="w-full h-full bg-riso-sun" />
       )}
 
       {photos.length > 1 && (
-        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-1.5 z-10">
+        <div className="absolute bottom-3.5 left-1/2 -translate-x-1/2 flex gap-1.5 z-10">
           {photos.map((_, i) => (
             <button
               key={i}
               onClick={() => setPhotoIdx(i)}
-              className={`h-1 rounded-full transition-all duration-300 ${
-                i === photoIdx ? 'w-6 bg-white' : 'w-1.5 bg-white/40'
+              className={`h-1.5 transition-all duration-300 ${
+                i === photoIdx ? 'w-6 bg-riso-sun' : 'w-2 bg-paper-3/60'
               }`}
             />
           ))}

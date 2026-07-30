@@ -9,24 +9,29 @@ export function CuisineFilter({
   selectedId: number | null
   onSelect: (id: number | null) => void
 }) {
-  const baseCls =
-    'h-9 px-5 rounded-full text-sm whitespace-nowrap inline-flex items-center justify-center transition-colors'
-  const activeCls = `${baseCls} bg-neutral-200 text-neutral-900`
-  const inactiveCls = `${baseCls} bg-white border border-neutral-200 text-neutral-500 hover:text-neutral-900`
+  const base =
+    'font-stamp uppercase tracking-[0.05em] text-[13.5px] px-4 py-2 border-2 border-ink whitespace-nowrap transition-all hover:-translate-x-px hover:-translate-y-px'
+  const active = 'bg-riso-pink text-paper-3 border-riso-pink'
+  // спот-краски чередуются по чипам — «индекс кухонь» из печатного зина
+  const spotHover = [
+    'bg-paper-3 text-ink hover:shadow-[3px_3px_0_#f2315d]',
+    'bg-paper-3 text-ink hover:shadow-[3px_3px_0_#2331b4]',
+    'bg-paper-3 text-ink hover:shadow-[3px_3px_0_#f4b71a]',
+  ]
 
   return (
-    <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-none">
+    <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-none">
       <button
         onClick={() => onSelect(null)}
-        className={selectedId === null ? activeCls : inactiveCls}
+        className={`${base} ${selectedId === null ? active : 'bg-paper-3 text-ink hover:shadow-[3px_3px_0_#211d17]'}`}
       >
-        Все
+        Все столы
       </button>
-      {cuisines?.map((cuisine) => (
+      {cuisines?.map((cuisine, i) => (
         <button
           key={cuisine.id}
           onClick={() => onSelect(cuisine.id === selectedId ? null : cuisine.id)}
-          className={cuisine.id === selectedId ? activeCls : inactiveCls}
+          className={`${base} ${cuisine.id === selectedId ? active : spotHover[i % spotHover.length]}`}
         >
           {cuisine.name}
         </button>

@@ -1,15 +1,15 @@
 import type { ReactNode } from 'react'
+import { Masthead } from '@/widgets/masthead'
 
-interface MobileLayoutProps {
+interface RootLayoutProps {
   children: ReactNode
 }
 
-export function MobileLayout({ children }: MobileLayoutProps) {
+export function RootLayout({ children }: RootLayoutProps) {
   return (
-    <div className="min-h-svh bg-gray-100 flex justify-center">
-      <div className="w-full max-w-[480px] bg-white min-h-svh relative shadow-sm">
-        {children}
-      </div>
+    <div className="min-h-svh flex flex-col">
+      <Masthead />
+      <div className="flex-1">{children}</div>
     </div>
   )
 }

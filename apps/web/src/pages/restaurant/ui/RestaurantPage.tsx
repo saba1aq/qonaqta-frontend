@@ -2,23 +2,19 @@ import { useParams, Link, useNavigate } from '@tanstack/react-router'
 import { ArrowLeft, Share2, MapPin } from 'lucide-react'
 import { useBranchDetail } from '@/entities/restaurant'
 import type { BranchPhoto } from '@/entities/restaurant'
-import { Button } from '@qonaqta/ui/components/button'
 import { PhotoCarousel } from './PhotoCarousel'
 import { DescriptionSection } from './DescriptionSection'
 import { ScheduleSection } from './ScheduleSection'
 import { StatusChip } from './StatusChip'
 import { FeaturesSection } from './FeaturesSection'
+import { Misreg } from '@/shared/ui/misreg'
 
 export function RestaurantPage() {
   const { id } = useParams({ strict: false }) as { id: string }
   const navigate = useNavigate()
   const { data: branch, isLoading } = useBranchDetail(id)
 
-  const allPhotos: BranchPhoto[] = branch
-    ? branch.photos.length > 0
-      ? branch.photos
-      : []
-    : []
+  const allPhotos: BranchPhoto[] = branch?.photos.length ? branch.photos : []
 
   const handleShare = async () => {
     if (navigator.share) {
@@ -28,17 +24,12 @@ export function RestaurantPage() {
 
   if (isLoading) {
     return (
-      <div className="animate-pulse">
-        <div className="h-[320px] bg-neutral-100" />
-        <div className="p-5 space-y-4">
-          <div className="h-7 bg-neutral-100 rounded-lg w-3/4" />
-          <div className="h-4 bg-neutral-100 rounded-lg w-1/2" />
-          <div className="flex gap-3 mt-4">
-            {[1, 2, 3].map((i) => (
-              <div key={i} className="size-14 rounded-2xl bg-neutral-100" />
-            ))}
-          </div>
-          <div className="h-20 bg-neutral-100 rounded-xl mt-4" />
+      <div className="mx-auto max-w-[1140px] px-[clamp(18px,4vw,44px)] py-8 grid lg:grid-cols-2 gap-8 animate-pulse">
+        <div className="aspect-[4/5] border-2 border-ink bg-paper-2" />
+        <div className="space-y-4">
+          <div className="h-10 w-3/4 bg-paper-2 border-2 border-ink" />
+          <div className="h-4 w-1/2 bg-paper-2" />
+          <div className="h-24 bg-paper-2 border-2 border-ink" />
         </div>
       </div>
     )
@@ -46,108 +37,97 @@ export function RestaurantPage() {
 
   if (!branch) {
     return (
-      <div className="flex flex-col items-center justify-center h-[60vh] text-neutral-400">
-        <p className="text-lg font-medium">Ресторан не найден</p>
-        <Link to="/restaurants" className="mt-3 text-sm text-neutral-900 underline underline-offset-4">
-          На главную
+      <div className="mx-auto max-w-[1140px] px-6 py-24 text-center">
+        <p className="font-display font-bold text-[26px]">Ресторан не найден</p>
+        <Link
+          to="/restaurants"
+          className="inline-block mt-4 font-stamp uppercase text-[12px] tracking-[0.08em] underline underline-offset-4 decoration-riso-pink decoration-2"
+        >
+          К ресторанам
         </Link>
       </div>
     )
   }
 
   return (
-    <div className="flex flex-col min-h-screen bg-white">
-      <div className="relative h-[320px] flex-shrink-0 overflow-hidden rounded-b-3xl">
-        <PhotoCarousel photos={allPhotos} branchName={branch.name} />
-
-        <div className="absolute top-0 left-0 right-0 flex items-center justify-between p-4 z-10">
-          <Link
-            to="/restaurants"
-            className="size-10 rounded-full bg-white/90 backdrop-blur-sm flex items-center justify-center shadow-sm active:scale-95 transition-transform"
-          >
-            <ArrowLeft className="size-5 text-neutral-900" />
-          </Link>
-          <button
-            onClick={handleShare}
-            className="size-10 rounded-full bg-white/90 backdrop-blur-sm flex items-center justify-center shadow-sm active:scale-95 transition-transform"
-          >
-            <Share2 className="size-5 text-neutral-900" />
-          </button>
-        </div>
+    <div className="mx-auto max-w-[1140px] px-[clamp(18px,4vw,44px)] pt-[clamp(22px,3vw,36px)] pb-36">
+      {/* back / share */}
+      <div className="flex items-center justify-between mb-5">
+        <Link
+          to="/restaurants"
+          className="inline-flex items-center gap-2 font-stamp uppercase tracking-[0.08em] text-[12px] hover:text-riso-pink transition-colors"
+        >
+          <ArrowLeft className="size-4" />
+          К ресторанам
+        </Link>
+        <button
+          onClick={handleShare}
+          className="inline-flex items-center gap-2 font-stamp uppercase tracking-[0.08em] text-[12px] border-2 border-ink px-3 py-1.5 bg-paper-3 hover:bg-riso-sun transition-colors"
+        >
+          <Share2 className="size-3.5" />
+          Поделиться
+        </button>
       </div>
 
-      <div className="flex-1 bg-white">
-        <div className="px-5 pt-5 pb-3">
-          <div className="flex items-start justify-between gap-3">
-            <div className="min-w-0">
-              <h1 className="text-[26px] font-bold text-neutral-900 leading-tight tracking-tight">
-                {branch.name}
-              </h1>
-              <div className="flex items-center gap-1.5 mt-1.5 text-neutral-500 text-sm">
-                <MapPin className="size-3.5 flex-shrink-0" />
-                <span className="truncate">{branch.address}</span>
-              </div>
-            </div>
-            {branch.status && <StatusChip status={branch.status} />}
-          </div>
+      {/* spread */}
+      <div className="grid lg:grid-cols-2 gap-[clamp(22px,4vw,48px)] items-start">
+        <div className="relative border-2 border-ink overflow-hidden aspect-[4/5] bg-riso-sun shadow-[10px_10px_0_#211d17]">
+          <PhotoCarousel photos={allPhotos} branchName={branch.name} />
         </div>
 
-        <div className="px-5 pb-36 space-y-6">
-          {branch.cuisines.length > 0 && (() => {
-            const half = Math.ceil(branch.cuisines.length / 2)
-            const row1 = branch.cuisines.slice(0, half)
-            const row2 = branch.cuisines.slice(half)
-            return (
-              <div
-                className="-mx-5 px-5 overflow-x-auto"
-                style={{ scrollbarWidth: 'none' }}
-              >
-                <div className="flex flex-col items-start gap-2 w-max">
-                  <div className="flex gap-2">
-                    {row1.map((c) => (
-                      <span
-                        key={c.id}
-                        className="px-4 py-2.5 rounded-full text-[13px] font-medium bg-neutral-100 text-neutral-700 whitespace-nowrap"
-                      >
-                        {c.name}
-                      </span>
-                    ))}
-                  </div>
-                  {row2.length > 0 && (
-                    <div className="flex gap-2">
-                      {row2.map((c) => (
-                        <span
-                          key={c.id}
-                          className="px-4 py-2.5 rounded-full text-[13px] font-medium bg-neutral-100 text-neutral-700 whitespace-nowrap"
-                        >
-                          {c.name}
-                        </span>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              </div>
-            )
-          })()}
-
-          <FeaturesSection features={branch.features} />
-
-          {branch.description && (
-            <DescriptionSection description={branch.description} />
+        <div>
+          {branch.status && (
+            <div className="mb-3">
+              <StatusChip status={branch.status} />
+            </div>
           )}
 
-          <ScheduleSection schedules={branch.schedules} todayDow={branch.today_dow} />
+          <h1 className="font-display font-extrabold tracking-[-0.04em] leading-[0.92] text-[clamp(32px,6vw,56px)]">
+            <Misreg color="blue">{branch.name}</Misreg>
+          </h1>
+          <div className="flex items-center gap-1.5 mt-2.5 text-ink-soft text-[14px]">
+            <MapPin className="size-4 shrink-0" />
+            <span>{branch.address}</span>
+          </div>
+
+          {branch.cuisines.length > 0 && (
+            <div className="flex flex-wrap gap-2 mt-5">
+              {branch.cuisines.map((c) => (
+                <span
+                  key={c.id}
+                  className="font-stamp uppercase tracking-[0.06em] text-[12px] border-2 border-ink px-3 py-1.5"
+                >
+                  {c.name}
+                </span>
+              ))}
+            </div>
+          )}
+
+          <div className="mt-7 space-y-7">
+            <FeaturesSection features={branch.features} />
+            {branch.description && <DescriptionSection description={branch.description} />}
+            <ScheduleSection schedules={branch.schedules} todayDow={branch.today_dow} />
+          </div>
         </div>
       </div>
 
-      <div className="fixed bottom-0 left-0 right-0 max-w-120 mx-auto z-30">
-        <div className="bg-white/80 backdrop-blur-xl border-t border-neutral-100 px-5 py-4">
-          <Button
-            className="w-full h-13 rounded-2xl text-[15px] font-semibold bg-neutral-900 text-white hover:bg-neutral-800 active:scale-[0.98] transition-all shadow-lg shadow-neutral-900/20"
+      {/* sticky booking CTA */}
+      <div className="fixed bottom-0 left-0 right-0 z-30 bg-paper/90 backdrop-blur-md border-t-2 border-ink">
+        <div className="mx-auto max-w-[1140px] px-[clamp(18px,4vw,44px)] py-3.5 flex items-center justify-between gap-4">
+          <div className="hidden sm:block min-w-0">
+            <div className="font-display font-bold text-[18px] truncate">{branch.name}</div>
+            <div className="text-ink-soft text-[13px] truncate">
+              {branch.cuisines[0]?.name}
+              {branch.cuisines[0] ? ' · ' : ''}
+              {branch.city.name}
+            </div>
+          </div>
+          <button
             onClick={() => navigate({ to: '/restaurant/$id/book', params: { id } })}
+            className="w-full sm:w-auto font-display font-bold text-[15px] bg-ink text-paper-3 px-7 py-4 shadow-[6px_6px_0_#f2315d] hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[9px_9px_0_#f2315d] active:translate-x-0 active:translate-y-0 transition-all"
           >
-            Забронировать столик
-          </Button>
+            Забронировать столик →
+          </button>
         </div>
       </div>
     </div>

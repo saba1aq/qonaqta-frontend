@@ -1,5 +1,5 @@
 import { createRouter, createRoute, createRootRoute, Outlet } from '@tanstack/react-router'
-import { MobileLayout } from './providers/mobile-layout'
+import { RootLayout } from './providers/mobile-layout'
 import { LandingPage } from '@/pages/landing'
 import { HomePage } from '@/pages/home'
 import { RestaurantPage } from '@/pages/restaurant'
@@ -9,9 +9,9 @@ import { AuthPage } from '@/pages/auth'
 
 const rootRoute = createRootRoute({
   component: () => (
-    <MobileLayout>
+    <RootLayout>
       <Outlet />
-    </MobileLayout>
+    </RootLayout>
   ),
 })
 

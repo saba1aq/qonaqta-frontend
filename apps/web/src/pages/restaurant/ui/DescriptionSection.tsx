@@ -5,14 +5,16 @@ export function DescriptionSection({ description }: { description: string }) {
 
   return (
     <div>
-      <h3 className="text-[15px] font-semibold text-neutral-900 mb-2">О заведении</h3>
-      <p className={`text-sm text-neutral-500 leading-relaxed ${!expanded ? 'line-clamp-3' : ''}`}>
+      <h3 className="font-stamp uppercase tracking-[0.12em] text-[12px] text-ink-soft mb-3">
+        О заведении
+      </h3>
+      <p className={`text-[15px] text-[#3b352b] leading-relaxed ${!expanded ? 'line-clamp-4' : ''}`}>
         {description}
       </p>
-      {description.length > 150 && (
+      {description.length > 180 && (
         <button
           onClick={() => setExpanded(!expanded)}
-          className="text-xs font-medium text-neutral-900 mt-1.5 underline underline-offset-2"
+          className="font-stamp uppercase text-[12px] tracking-[0.08em] text-ink mt-2 underline underline-offset-4 decoration-riso-pink decoration-2"
         >
           {expanded ? 'Свернуть' : 'Подробнее'}
         </button>

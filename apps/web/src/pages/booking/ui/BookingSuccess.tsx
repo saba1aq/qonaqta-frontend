@@ -1,5 +1,4 @@
-import { CheckCircle2 } from 'lucide-react'
-import { Button } from '@qonaqta/ui/components/button'
+import { Ticket } from './Ticket'
 
 export function BookingSuccess({
   branchName,
@@ -17,50 +16,40 @@ export function BookingSuccess({
   onGoHome: () => void
 }) {
   return (
-    <div className="flex flex-col h-svh px-6 pt-6 pb-5 max-w-md mx-auto">
-      <div className="flex-1 flex flex-col items-center justify-center text-center min-h-0 overflow-y-auto">
-        <CheckCircle2 className="size-14 text-neutral-900 mb-5 shrink-0" />
-        <h2 className="text-[24px] font-bold text-neutral-900 leading-tight">Заявка принята</h2>
-        <p className="text-[14px] text-neutral-500 mt-2 leading-relaxed">
-          Менеджер свяжется с вами
-          <br />
-          для подтверждения брони
+    <div className="mx-auto max-w-[560px] px-[clamp(18px,4vw,44px)] py-[clamp(36px,7vw,72px)]">
+      <div className="text-center">
+        <div className="font-stamp uppercase tracking-[0.16em] text-[13px] text-riso-pink font-semibold">
+          Готово
+        </div>
+        <h2 className="font-display font-extrabold tracking-[-0.04em] text-[clamp(30px,7vw,48px)] mt-2 leading-[0.95]">
+          Заявка принята
+        </h2>
+        <p className="text-ink-soft text-[15px] mt-3 leading-relaxed">
+          Ресторан свяжется с вами для подтверждения брони.
         </p>
-
-        {branchName && (
-          <div className="w-full mt-6 rounded-2xl bg-neutral-50 border border-neutral-100 overflow-hidden">
-            <div className="p-5 text-left">
-              <p className="text-[11px] uppercase tracking-wider text-neutral-400 font-semibold mb-2">Место</p>
-              <p className="text-[18px] font-bold text-neutral-900">{branchName}</p>
-              {branchAddress && (
-                <p className="text-[12px] text-neutral-500 mt-0.5">{branchAddress}</p>
-              )}
-            </div>
-            <div className="mx-5 border-t border-dashed border-neutral-300" />
-            <div className="p-5 grid grid-cols-3 gap-2 text-center">
-              <div>
-                <p className="text-[10px] uppercase text-neutral-400 font-semibold tracking-wider">Дата</p>
-                <p className="text-[15px] font-bold text-neutral-900 mt-1 tabular-nums">{formattedDate}</p>
-              </div>
-              <div>
-                <p className="text-[10px] uppercase text-neutral-400 font-semibold tracking-wider">Время</p>
-                <p className="text-[15px] font-bold text-neutral-900 mt-1 tabular-nums">{timeSlot}</p>
-              </div>
-              <div>
-                <p className="text-[10px] uppercase text-neutral-400 font-semibold tracking-wider">Гостей</p>
-                <p className="text-[15px] font-bold text-neutral-900 mt-1">{guestCount}</p>
-              </div>
-            </div>
-          </div>
-        )}
       </div>
 
-      <Button
-        className="w-full shrink-0 mt-4 h-13 rounded-2xl text-[15px] font-semibold bg-neutral-900 text-white hover:bg-neutral-800 active:scale-[0.98] transition-all shadow-lg shadow-neutral-900/20"
-        onClick={onGoHome}
-      >
-        На главную
-      </Button>
+      {branchName && (
+        <div className="mt-8">
+          <Ticket
+            branchName={branchName}
+            address={branchAddress}
+            formattedDate={formattedDate}
+            timeSlot={timeSlot}
+            guestCount={guestCount}
+            stamp="Принято"
+          />
+        </div>
+      )}
+
+      <div className="mt-8 flex justify-center">
+        <button
+          onClick={onGoHome}
+          className="font-display font-bold text-[15px] bg-ink text-paper-3 px-7 py-4 shadow-[6px_6px_0_#f4b71a] hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[9px_9px_0_#f4b71a] transition-all"
+        >
+          К ресторанам →
+        </button>
+      </div>
     </div>
   )
 }

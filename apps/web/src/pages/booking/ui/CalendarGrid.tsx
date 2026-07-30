@@ -59,14 +59,16 @@ export function CalendarGrid({
       : `${MONTH_NAMES[start.getMonth()]} – ${MONTH_NAMES[lastDay.getMonth()]}`
 
   return (
-    <div className="rounded-2xl border border-neutral-200 bg-white p-4">
+    <div>
       <div className="flex items-center justify-between mb-3">
-        <h3 className="text-lg font-bold text-neutral-900">{headerLabel}</h3>
-        <CalendarDays className="size-5 text-neutral-500" />
+        <h3 className="font-stamp uppercase tracking-[0.12em] text-[12px] text-ink-soft">
+          Дата · {headerLabel}
+        </h3>
+        <CalendarDays className="size-4 text-ink-soft" />
       </div>
 
-      <div className="-mx-4 overflow-x-auto px-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-        <div className="flex gap-2 min-w-max">
+      <div className="-mx-1 overflow-x-auto px-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+        <div className="flex gap-2 min-w-max pb-1">
           {days.map((day) => {
             const dateStr = formatDate(day)
             const isSelected = dateStr === date
@@ -79,21 +81,23 @@ export function CalendarGrid({
                 key={dateStr}
                 disabled={isClosed}
                 onClick={() => onSelect(dateStr)}
-                className={`flex flex-col items-center justify-center w-12 h-16 rounded-xl shrink-0 transition-colors ${
+                className={`flex flex-col items-center justify-center w-14 h-[68px] shrink-0 border-2 border-ink transition-all ${
                   isSelected
-                    ? 'bg-foreground text-white'
+                    ? 'bg-ink text-paper-3'
                     : isClosed
-                      ? 'text-red-400'
-                      : 'text-neutral-900 hover:bg-neutral-50'
+                      ? 'bg-paper-2 text-ink-soft/40 line-through cursor-not-allowed'
+                      : 'bg-paper-3 hover:bg-riso-sun'
                 }`}
               >
-                <span className="text-lg font-bold leading-none">{day.getDate()}</span>
                 <span
-                  className={`text-[11px] mt-1 leading-none ${
-                    isSelected ? 'text-white/70' : isClosed ? 'text-red-400/70' : 'text-neutral-400'
+                  className={`font-stamp uppercase text-[10px] tracking-[0.1em] leading-none ${
+                    isSelected ? 'text-paper-3/70' : 'text-ink-soft'
                   }`}
                 >
                   {WEEK_DAYS_SHORT[day.getDay()]}
+                </span>
+                <span className="font-display font-bold text-[19px] leading-none mt-1.5">
+                  {day.getDate()}
                 </span>
               </button>
             )
