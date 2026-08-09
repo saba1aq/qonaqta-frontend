@@ -4,9 +4,9 @@ on:
   push:
     branches: [main]
     paths:
-      - 'apps/**'
-      - 'packages/**'
-      - 'pnpm-lock.yaml'
+      - "apps/**"
+      - "packages/**"
+      - "pnpm-lock.yaml"
 
 concurrency:
   group: deploy-frontend
@@ -24,7 +24,7 @@ jobs:
       - uses: actions/setup-node@v5
         with:
           node-version: 22
-          cache: 'pnpm'
+          cache: "pnpm"
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
@@ -72,7 +72,6 @@ jobs:
 
             echo "=== Health check ==="
             curl -sf https://qonaqta.kz/ > /dev/null && echo "Web: OK" || echo "WARNING: Web health check failed"
-            curl -sf https://dashboard.qonaqta.kz/ > /dev/null && echo "Partner: OK" || echo "WARNING: Partner health check failed"
-            curl -sf https://hub.qonaqta.kz/ > /dev/null && echo "Dashboard: OK" || echo "WARNING: Dashboard health check failed"
+            curl -sf https://dashboard.qonaqta.kz/ > /dev/null && echo "Dashboard: OK" || echo "WARNING: Dashboard health check failed"
 
             echo "=== Frontend deployed successfully! ==="

@@ -4,7 +4,6 @@
   "scripts": {
     "dev": "turbo dev",
     "dev:web": "turbo dev --filter=@qonaqta/web",
-    "dev:partner": "turbo dev --filter=@qonaqta/partner",
     "dev:dashboard": "turbo dev --filter=@qonaqta/dashboard",
     "build": "turbo build",
     "lint": "turbo lint",
