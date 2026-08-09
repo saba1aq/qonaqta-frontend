@@ -16,7 +16,7 @@ export function GuestCountSelector({
         <button
           onClick={() => onChange(count - 1)}
           disabled={count <= 1}
-          className="w-12 h-12 grid place-items-center bg-paper-3 hover:bg-riso-sun disabled:opacity-30 disabled:hover:bg-paper-3 transition-colors"
+          className="w-12 h-12 grid place-items-center bg-paper-3 hover:bg-lilac-soft disabled:opacity-30 disabled:hover:bg-paper-3 transition-colors"
         >
           <Minus className="size-4" />
         </button>
@@ -26,7 +26,7 @@ export function GuestCountSelector({
         <button
           onClick={() => onChange(count + 1)}
           disabled={count >= 20}
-          className="w-12 h-12 grid place-items-center bg-paper-3 hover:bg-riso-sun disabled:opacity-30 disabled:hover:bg-paper-3 transition-colors"
+          className="w-12 h-12 grid place-items-center bg-paper-3 hover:bg-lilac-soft disabled:opacity-30 disabled:hover:bg-paper-3 transition-colors"
         >
           <Plus className="size-4" />
         </button>

@@ -9,7 +9,7 @@ import { BookingSuccess } from './BookingSuccess'
 import { Ticket } from './Ticket'
 
 const inputCls =
-  'w-full border-2 border-ink bg-paper-3 px-4 py-3 text-[15px] text-ink outline-none placeholder:text-ink-soft focus:shadow-[3px_3px_0_#2331b4] transition-shadow'
+  'w-full border-2 border-ink bg-paper-3 px-4 py-3 text-[15px] text-ink outline-none placeholder:text-ink-soft focus:shadow-[3px_3px_0_#eec0ff] transition-shadow'
 const labelCls = 'font-stamp uppercase tracking-[0.1em] text-[11px] text-ink-soft mb-2 block'
 
 export function ConfirmPage() {
@@ -97,7 +97,7 @@ export function ConfirmPage() {
         <Link
           to="/restaurant/$id/book"
           params={{ id }}
-          className="flex items-center gap-2 font-stamp uppercase tracking-[0.08em] text-[12px] hover:text-riso-pink transition-colors min-w-0"
+          className="flex items-center gap-2 font-stamp uppercase tracking-[0.08em] text-[12px] hover:text-ink-soft transition-colors min-w-0"
         >
           <ArrowLeft className="size-4 shrink-0" />
           <span className="truncate min-w-0">{branch?.name ?? 'Назад'}</span>
@@ -162,7 +162,7 @@ export function ConfirmPage() {
                     type="button"
                     onClick={() => setContactMethod(value)}
                     className={`border-2 border-ink px-4 py-3 text-[14px] font-medium text-left transition-colors ${
-                      contactMethod === value ? 'bg-ink text-paper-3' : 'bg-paper-3 hover:bg-riso-sun'
+                      contactMethod === value ? 'bg-ink text-paper-3' : 'bg-paper-3 hover:bg-lilac-soft'
                     }`}
                   >
                     {label}
@@ -186,7 +186,7 @@ export function ConfirmPage() {
           </div>
 
           {createBooking.error && (
-            <div className="border-2 border-riso-pink bg-riso-pink/10 px-4 py-3 text-[14px] text-ink">
+            <div role="alert" className="border-2 border-danger bg-danger/8 px-4 py-3 text-[14px] text-danger">
               Нет свободных столиков на это время. Попробуйте другое время.
             </div>
           )}
@@ -214,7 +214,7 @@ export function ConfirmPage() {
             onClick={handleSubmit}
             className={`w-full sm:w-auto font-display font-bold text-[15px] px-7 py-4 transition-all ${
               canSubmit && !createBooking.isPending
-                ? 'bg-ink text-paper-3 shadow-[6px_6px_0_#f2315d] hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[9px_9px_0_#f2315d]'
+                ? 'bg-ink text-paper-3 shadow-[6px_6px_0_#eec0ff] hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[9px_9px_0_#eec0ff]'
                 : 'bg-paper-2 text-ink-soft border-2 border-ink cursor-not-allowed'
             }`}
           >

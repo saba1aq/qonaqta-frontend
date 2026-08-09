@@ -24,7 +24,7 @@ export function ScheduleSection({
             <div
               key={s.day_of_week}
               className={`flex justify-between items-center text-[14px] py-2.5 border-b border-ink/20 ${
-                isToday ? 'bg-riso-sun font-semibold px-2 -mx-2' : ''
+                isToday ? 'bg-lilac font-semibold px-2 -mx-2' : ''
               }`}
             >
               <span>{DAY_NAMES[s.day_of_week - 1]}</span>

@@ -42,11 +42,11 @@ export function HomePage() {
       <div className="flex items-end justify-between gap-4 flex-wrap mb-5">
         <h1 className="font-display font-bold tracking-[-0.035em] text-[clamp(26px,5vw,44px)]">
           Столы{' '}
-          <Misreg color="pink">{selectedCity?.name ?? 'города'}</Misreg>
+          <Misreg>{selectedCity?.name ?? 'города'}</Misreg>
         </h1>
         <CityPicker
           cities={cities}
-          selectedCityId={selectedCityId}
+          selectedCityId={activeCityId}
           onCitySelect={handleCitySelect}
           showPicker={showCityPicker}
           onTogglePicker={() => setShowCityPicker(!showCityPicker)}
@@ -62,6 +62,7 @@ export function HomePage() {
           onSelect={setSelectedCuisineId}
         />
       </div>
+
 
       {/* grid */}
       <div className="mt-7">

@@ -3,28 +3,25 @@ import { ArrowRight } from 'lucide-react'
 import { useCities, useBranches } from '@/entities/restaurant'
 import type { BranchList } from '@/entities/restaurant'
 
-const SPOTS = ['bg-riso-pink', 'bg-riso-blue', 'bg-riso-sun']
-
-function FeaturedCard({ branch, index }: { branch: BranchList; index: number }) {
-  const spot = SPOTS[index % SPOTS.length]
+function FeaturedCard({ branch }: { branch: BranchList }) {
   const photo = branch.photos[0]?.image_url
   return (
     <Link
       to="/restaurant/$id"
       params={{ id: String(branch.id) }}
-      className="group w-[248px] shrink-0 bg-paper-3 border-2 border-ink shadow-[6px_6px_0_#211d17] hover:-translate-x-[3px] hover:-translate-y-[3px] hover:shadow-[9px_9px_0_#f2315d] transition-all duration-150"
+      className="w-[248px] shrink-0 bg-paper-3 border-2 border-ink"
     >
       <div className="relative aspect-[4/3] overflow-hidden border-b-2 border-ink bg-paper-2">
         {photo ? (
           <img src={photo} alt={branch.name} loading="lazy" className="w-full h-full object-cover" />
         ) : (
-          <div className={`w-full h-full ${spot}`} />
+          <div className="w-full h-full bg-paper-2" />
         )}
       </div>
-      <div className={`h-1.5 ${spot}`} />
+      <div className="h-1.5 bg-lilac" />
       <div className="p-4">
         {branch.cuisines[0] && (
-          <div className="font-stamp uppercase tracking-[0.1em] text-[10.5px] font-semibold text-riso-blue">
+          <div className="font-stamp uppercase tracking-[0.1em] text-[10.5px] font-semibold text-ink-soft">
             {branch.cuisines[0].name}
           </div>
         )}
@@ -53,7 +50,7 @@ export function FeaturedSection() {
         </h2>
         <Link
           to="/restaurants"
-          className="inline-flex items-center gap-1.5 font-stamp uppercase tracking-[0.1em] text-[12px] text-ink hover:text-riso-pink transition-colors"
+          className="inline-flex items-center gap-1.5 font-stamp uppercase tracking-[0.1em] text-[12px] text-ink hover:text-ink-soft transition-colors"
         >
           Все рестораны <ArrowRight className="size-4" />
         </Link>
@@ -65,7 +62,7 @@ export function FeaturedSection() {
             ? [0, 1, 2, 3].map((i) => (
                 <div key={i} className="w-[248px] shrink-0 aspect-[4/3] border-2 border-ink bg-paper-2 animate-pulse" />
               ))
-            : featured.map((branch, i) => <FeaturedCard key={branch.id} branch={branch} index={i} />)}
+            : featured.map((branch) => <FeaturedCard key={branch.id} branch={branch} />)}
         </div>
       </div>
     </section>

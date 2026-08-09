@@ -22,11 +22,11 @@ export function Ticket({
   stamp?: string
 }) {
   return (
-    <div className="relative bg-paper-3 border-2 border-dashed border-ink p-5 shadow-[9px_9px_0_#2331b4]">
+    <div className="relative bg-paper-3 border-2 border-dashed border-ink p-5 shadow-[9px_9px_0_#eec0ff]">
       <span className="absolute top-1/2 -left-[13px] -translate-y-1/2 size-[22px] rounded-full bg-paper border-2 border-dashed border-ink" />
       <span className="absolute top-1/2 -right-[13px] -translate-y-1/2 size-[22px] rounded-full bg-paper border-2 border-dashed border-ink" />
 
-      <span className="absolute top-3.5 right-4 font-stamp uppercase tracking-[0.08em] font-bold text-[13px] text-riso-pink border-2 border-riso-pink px-2 py-1 -rotate-[8deg] opacity-90">
+      <span className="absolute top-3.5 right-4 font-stamp uppercase tracking-[0.08em] font-bold text-[13px] text-ink border-2 border-lilac px-2 py-1 -rotate-[8deg] opacity-90">
         {stamp}
       </span>
 
@@ -42,7 +42,7 @@ export function Ticket({
       <div className="font-display font-extrabold tracking-[-0.03em] text-[24px] leading-tight">
         {branchName}
       </div>
-      <div className="font-display font-bold text-[20px] text-riso-pink mt-1 tabular-nums">
+      <div className="font-display font-bold text-[20px] text-ink mt-1 tabular-nums">
         {formattedDate}
         {timeSlot ? ` · ${timeSlot}` : ''}
       </div>

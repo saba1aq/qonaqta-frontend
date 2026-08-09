@@ -41,7 +41,7 @@ export function RestaurantPage() {
         <p className="font-display font-bold text-[26px]">Ресторан не найден</p>
         <Link
           to="/restaurants"
-          className="inline-block mt-4 font-stamp uppercase text-[12px] tracking-[0.08em] underline underline-offset-4 decoration-riso-pink decoration-2"
+          className="inline-block mt-4 font-stamp uppercase text-[12px] tracking-[0.08em] underline underline-offset-4 decoration-lilac decoration-2"
         >
           К ресторанам
         </Link>
@@ -55,14 +55,14 @@ export function RestaurantPage() {
       <div className="flex items-center justify-between mb-5">
         <Link
           to="/restaurants"
-          className="inline-flex items-center gap-2 font-stamp uppercase tracking-[0.08em] text-[12px] hover:text-riso-pink transition-colors"
+          className="inline-flex items-center gap-2 font-stamp uppercase tracking-[0.08em] text-[12px] hover:text-ink-soft transition-colors"
         >
           <ArrowLeft className="size-4" />
           К ресторанам
         </Link>
         <button
           onClick={handleShare}
-          className="inline-flex items-center gap-2 font-stamp uppercase tracking-[0.08em] text-[12px] border-2 border-ink px-3 py-1.5 bg-paper-3 hover:bg-riso-sun transition-colors"
+          className="inline-flex items-center gap-2 font-stamp uppercase tracking-[0.08em] text-[12px] border-2 border-ink px-3 py-1.5 bg-paper-3 hover:bg-lilac-soft transition-colors"
         >
           <Share2 className="size-3.5" />
           Поделиться
@@ -71,7 +71,7 @@ export function RestaurantPage() {
 
       {/* spread */}
       <div className="grid lg:grid-cols-2 gap-[clamp(22px,4vw,48px)] items-start">
-        <div className="relative border-2 border-ink overflow-hidden aspect-[4/5] bg-riso-sun shadow-[10px_10px_0_#211d17]">
+        <div className="relative border-2 border-ink overflow-hidden aspect-[4/5] bg-lilac">
           <PhotoCarousel photos={allPhotos} branchName={branch.name} />
         </div>
 
@@ -83,7 +83,7 @@ export function RestaurantPage() {
           )}
 
           <h1 className="font-display font-extrabold tracking-[-0.04em] leading-[0.92] text-[clamp(32px,6vw,56px)]">
-            <Misreg color="blue">{branch.name}</Misreg>
+            <Misreg>{branch.name}</Misreg>
           </h1>
           <div className="flex items-center gap-1.5 mt-2.5 text-ink-soft text-[14px]">
             <MapPin className="size-4 shrink-0" />
@@ -124,7 +124,7 @@ export function RestaurantPage() {
           </div>
           <button
             onClick={() => navigate({ to: '/restaurant/$id/book', params: { id } })}
-            className="w-full sm:w-auto font-display font-bold text-[15px] bg-ink text-paper-3 px-7 py-4 shadow-[6px_6px_0_#f2315d] hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[9px_9px_0_#f2315d] active:translate-x-0 active:translate-y-0 transition-all"
+            className="w-full sm:w-auto font-display font-bold text-[15px] bg-ink text-paper-3 px-7 py-4 shadow-[6px_6px_0_#eec0ff] hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[9px_9px_0_#eec0ff] active:translate-x-0 active:translate-y-0 transition-all"
           >
             Забронировать столик →
           </button>

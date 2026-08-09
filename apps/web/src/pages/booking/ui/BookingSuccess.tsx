@@ -18,7 +18,7 @@ export function BookingSuccess({
   return (
     <div className="mx-auto max-w-[560px] px-[clamp(18px,4vw,44px)] py-[clamp(36px,7vw,72px)]">
       <div className="text-center">
-        <div className="font-stamp uppercase tracking-[0.16em] text-[13px] text-riso-pink font-semibold">
+        <div className="font-stamp uppercase tracking-[0.16em] text-[13px] text-ink font-semibold">
           Готово
         </div>
         <h2 className="font-display font-extrabold tracking-[-0.04em] text-[clamp(30px,7vw,48px)] mt-2 leading-[0.95]">
@@ -45,7 +45,7 @@ export function BookingSuccess({
       <div className="mt-8 flex justify-center">
         <button
           onClick={onGoHome}
-          className="font-display font-bold text-[15px] bg-ink text-paper-3 px-7 py-4 shadow-[6px_6px_0_#f4b71a] hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[9px_9px_0_#f4b71a] transition-all"
+          className="font-display font-bold text-[15px] bg-ink text-paper-3 px-7 py-4 shadow-[6px_6px_0_#eec0ff] hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[9px_9px_0_#eec0ff] transition-all"
         >
           К ресторанам →
         </button>

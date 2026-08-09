@@ -44,7 +44,7 @@ export function PhotoCarousel({
           ))}
         </div>
       ) : (
-        <div className="w-full h-full bg-riso-sun" />
+        <div className="w-full h-full bg-lilac" />
       )}
 
       {photos.length > 1 && (
@@ -54,7 +54,7 @@ export function PhotoCarousel({
               key={i}
               onClick={() => setPhotoIdx(i)}
               className={`h-1.5 transition-all duration-300 ${
-                i === photoIdx ? 'w-6 bg-riso-sun' : 'w-2 bg-paper-3/60'
+                i === photoIdx ? 'w-6 bg-lilac' : 'w-2 bg-paper-3/60'
               }`}
             />
           ))}

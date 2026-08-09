@@ -86,7 +86,7 @@ export function CalendarGrid({
                     ? 'bg-ink text-paper-3'
                     : isClosed
                       ? 'bg-paper-2 text-ink-soft/40 line-through cursor-not-allowed'
-                      : 'bg-paper-3 hover:bg-riso-sun'
+                      : 'bg-paper-3 hover:bg-lilac-soft'
                 }`}
               >
                 <span

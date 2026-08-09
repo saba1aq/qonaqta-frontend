@@ -3,41 +3,44 @@
 @import "shadcn/tailwind.css";
 @import "@qonaqta/ui/styles/base.css";
 
-/* ===== Qonaqta гостевой мир: «Ризо-гид» ===== */
+/* ===== Qonaqta гостевой мир ===== */
+/* Нейтральная база + ОДИН пастельный акцент в двух тонах.
+   Пастель работает только заливкой с тёмным текстом — не текстом на светлом. */
 @theme {
-  --color-paper: #f2e9d7;
-  --color-paper-2: #eaddc4;
-  --color-paper-3: #f8f1e3;
-  --color-ink: #211d17;
-  --color-ink-soft: #5b5347;
-  --color-riso-pink: #f2315d;
-  --color-riso-blue: #2331b4;
-  --color-riso-sun: #f4b71a;
+  --color-paper: #fefefe;
+  --color-paper-2: #f3f3f3;
+  --color-paper-3: #fefefe;
+  --color-ink: #1c1c1c;
+  --color-ink-2: #232323;
+  --color-ink-soft: #6b6b6b;
+  --color-lilac: #eec0ff;
+  --color-lilac-soft: #f9e7ff;
+  --color-danger: #b3261e;
   --font-sans: "Golos Text", system-ui, sans-serif;
   --font-display: "Unbounded", system-ui, sans-serif;
   --font-stamp: "Oswald", system-ui, sans-serif;
 }
 
-/* seмантические токены shadcn → мир (чтобы Button и пр. приняли стиль) */
+/* семантические токены shadcn → мир (чтобы Button и пр. приняли стиль) */
 :root {
-  --background: #f2e9d7;
-  --foreground: #211d17;
-  --card: #f8f1e3;
-  --card-foreground: #211d17;
-  --popover: #f8f1e3;
-  --popover-foreground: #211d17;
-  --primary: #211d17;
-  --primary-foreground: #f8f1e3;
-  --secondary: #eaddc4;
-  --secondary-foreground: #211d17;
-  --muted: #eaddc4;
-  --muted-foreground: #5b5347;
-  --accent: #f2315d;
-  --accent-foreground: #f8f1e3;
-  --destructive: #f2315d;
-  --border: #211d17;
-  --input: #211d17;
-  --ring: #f2315d;
+  --background: #fefefe;
+  --foreground: #1c1c1c;
+  --card: #fefefe;
+  --card-foreground: #1c1c1c;
+  --popover: #fefefe;
+  --popover-foreground: #1c1c1c;
+  --primary: #1c1c1c;
+  --primary-foreground: #fefefe;
+  --secondary: #f3f3f3;
+  --secondary-foreground: #1c1c1c;
+  --muted: #f3f3f3;
+  --muted-foreground: #6b6b6b;
+  --accent: #eec0ff;
+  --accent-foreground: #1c1c1c;
+  --destructive: #b3261e;
+  --border: #1c1c1c;
+  --input: #1c1c1c;
+  --ring: #eec0ff;
   --radius: 0rem;
 }
 
@@ -47,8 +50,6 @@ html {
 
 body {
   background-color: var(--color-paper);
-  background-image: radial-gradient(rgba(33, 29, 23, 0.05) 1px, transparent 1.3px);
-  background-size: 4px 4px;
   color: var(--color-ink);
   font-family: "Golos Text", system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -62,7 +63,7 @@ body {
 }
 
 /* оседание краски в регистр — единственный авторский вход на первом экране */
-@keyframes riso-settle {
+@keyframes settle {
   from {
     opacity: 0;
     transform: translateY(10px);
@@ -73,12 +74,35 @@ body {
   }
 }
 
-.riso-settle {
-  animation: riso-settle 0.6s cubic-bezier(0.2, 0.85, 0.25, 1) backwards;
+.settle {
+  animation: settle 0.6s cubic-bezier(0.2, 0.85, 0.25, 1) backwards;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .riso-settle {
+  .settle {
+    animation: none;
+  }
+}
+
+/* origin-aware dropdown pop (city picker), ease-out */
+@keyframes dropdown-pop {
+  from {
+    opacity: 0;
+    transform: scale(0.96) translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.dropdown-pop {
+  transform-origin: top right;
+  animation: dropdown-pop 0.16s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dropdown-pop {
     animation: none;
   }
 }

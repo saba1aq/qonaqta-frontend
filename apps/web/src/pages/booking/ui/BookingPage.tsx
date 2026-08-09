@@ -47,7 +47,7 @@ export function BookingPage() {
         <Link
           to="/restaurant/$id"
           params={{ id }}
-          className="flex items-center gap-2 font-stamp uppercase tracking-[0.08em] text-[12px] hover:text-riso-pink transition-colors min-w-0"
+          className="flex items-center gap-2 font-stamp uppercase tracking-[0.08em] text-[12px] hover:text-ink-soft transition-colors min-w-0"
         >
           <ArrowLeft className="size-4 shrink-0" />
           <span className="truncate min-w-0">{branch?.name ?? 'Назад'}</span>
@@ -88,7 +88,7 @@ export function BookingPage() {
             onClick={() => navigate({ to: '/restaurant/$id/book/confirm', params: { id } })}
             className={`w-full sm:w-auto font-display font-bold text-[15px] px-7 py-4 transition-all ${
               canProceed
-                ? 'bg-ink text-paper-3 shadow-[6px_6px_0_#f2315d] hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[9px_9px_0_#f2315d]'
+                ? 'bg-ink text-paper-3 shadow-[6px_6px_0_#eec0ff] hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[9px_9px_0_#eec0ff]'
                 : 'bg-paper-2 text-ink-soft border-2 border-ink cursor-not-allowed'
             }`}
           >

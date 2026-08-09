@@ -20,7 +20,7 @@ const stampBase =
 export function StatusChip({ status }: { status: BranchStatus }) {
   if (status.state === 'open') {
     return (
-      <span className={`${stampBase} bg-riso-sun text-ink`}>
+      <span className={`${stampBase} bg-lilac text-ink`}>
         Открыто{status.open_until ? ` · до ${status.open_until}` : ''}
       </span>
     )
@@ -28,7 +28,7 @@ export function StatusChip({ status }: { status: BranchStatus }) {
 
   if (status.state === 'closing_soon') {
     return (
-      <span className={`${stampBase} bg-riso-pink text-paper-3`}>
+      <span className={`${stampBase} bg-ink text-paper`}>
         Закрывается через {status.closes_in_minutes} мин
       </span>
     )
