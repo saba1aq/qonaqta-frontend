@@ -4,6 +4,7 @@ import {
   CalendarCheck,
   UtensilsCrossed,
   Sparkles,
+  Megaphone,
   LogOut,
   ChevronLeft,
 } from "lucide-react"
@@ -20,6 +21,7 @@ const navItems = [
   { path: "/restaurants", label: "Рестораны", icon: Store, exact: false },
   { path: "/cuisines", label: "Кухни", icon: UtensilsCrossed, exact: false },
   { path: "/features", label: "Особенности", icon: Sparkles, exact: false },
+  { path: "/promotions", label: "Афиша", icon: Megaphone, exact: false },
   { path: "/bookings", label: "Брони", icon: CalendarCheck, exact: false },
 ]
 

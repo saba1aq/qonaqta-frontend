@@ -12,6 +12,7 @@ import { RestaurantCreatePage } from "@/pages/restaurant-create"
 import { BookingsPage } from "@/pages/bookings"
 import { CuisinesPage } from "@/pages/cuisines"
 import { FeaturesPage } from "@/pages/features"
+import { PromotionsPage } from "@/pages/promotions"
 import { ProtectedLayout } from "./providers/ProtectedLayout"
 
 const rootRoute = createRootRoute({
@@ -82,6 +83,12 @@ const featuresRoute = createRoute({
   component: FeaturesPage,
 })
 
+const promotionsRoute = createRoute({
+  getParentRoute: () => layoutRoute,
+  path: "/promotions",
+  component: PromotionsPage,
+})
+
 const routeTree = rootRoute.addChildren([
   loginRoute,
   layoutRoute.addChildren([
@@ -92,6 +99,7 @@ const routeTree = rootRoute.addChildren([
     bookingsRoute,
     cuisinesRoute,
     featuresRoute,
+    promotionsRoute,
   ]),
 ])
 
