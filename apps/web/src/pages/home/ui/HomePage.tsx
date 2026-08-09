@@ -5,6 +5,7 @@ import { CityPicker } from './CityPicker'
 import { SearchBar } from './SearchBar'
 import { CuisineFilter } from './CuisineFilter'
 import { BranchCard } from './BranchCard'
+import { PromoRail } from './PromoRail'
 import { Misreg } from '@/shared/ui/misreg'
 
 export function HomePage() {
@@ -29,6 +30,7 @@ export function HomePage() {
   )
 
   const selectedCity = cities?.find((c) => c.id === activeCityId)
+  const isFiltering = Boolean(debouncedQuery) || selectedCuisineId !== null
 
   const handleCitySelect = (cityId: number) => {
     setSelectedCityId(cityId)
@@ -63,6 +65,7 @@ export function HomePage() {
         />
       </div>
 
+      {!isFiltering && <PromoRail cityId={activeCityId} />}
 
       {/* grid */}
       <div className="mt-7">
