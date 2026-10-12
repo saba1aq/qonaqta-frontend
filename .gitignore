@@ -1,9 +1,40 @@
-node_modules
-dist
-.turbo
-*.local
+# Зависимости
+node_modules/
+.pnpm-store/
+
+# Сборка
+dist/
+dist-ssr/
+build/
+.turbo/
+.vite/
+*.tsbuildinfo
+coverage/
+
+# Секреты
 .env
 .env.*
 !.env.example
+*.local
+*.pem
+*.key
 
+# Логи
+*.log
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# IDE и ИИ-ассистенты
+.idea/
+.vscode/
+.cursor/
+.claude/
+.impeccable/
+*.swp
+*.swo
+
+# ОС
 .DS_Store
+Thumbs.db
